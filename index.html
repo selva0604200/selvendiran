@@ -6,7 +6,7 @@
 <title>Selvendiran | Portfolio</title>
 <style>
 /* =========================
-   RESET & LENIS SETUP
+   RESET & SMOOTH SCROLL
 ========================= */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { background: #02040a; }
@@ -18,25 +18,19 @@ html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
 body { background: transparent; color: white; font-family: Arial, Helvetica, sans-serif; }
 
 /* =========================
-   LOADING SCREEN
-========================= */
-#loader {
-    position: fixed; inset: 0; z-index: 9999;
-    background: #02040a;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    transition: opacity 1s ease, visibility 1s ease;
-}
-#loader.hidden { opacity: 0; visibility: hidden; }
-.loader-text { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 25px; }
-.loader-bar-bg { width: 250px; height: 2px; background: rgba(255,255,255,0.1); }
-.loader-fill { width: 0%; height: 100%; background: white; transition: width 0.1s ease; box-shadow: 0 0 10px white; }
-
-/* =========================
    BACKGROUND CANVAS
 ========================= */
-#video-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+#video-canvas {
+    position: fixed; inset: 0; width: 100vw; height: 100vh;
+    z-index: 0; pointer-events: none; background: #02040a;
+}
+/* We hide the actual video and draw it to the canvas for better performance */
 #background-video { display: none; }
-.video-overlay { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.15) 45%, rgba(0, 0, 0, 0.55)); }
+
+.video-overlay {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.15) 45%, rgba(0, 0, 0, 0.55));
+}
 
 /* =========================
    CONTENT LAYER
@@ -50,7 +44,7 @@ body { background: transparent; color: white; font-family: Arial, Helvetica, san
 #progress-bar { width: 0%; height: 100%; background: white; box-shadow: 0 0 15px white; }
 
 /* =========================
-   NAVIGATION & UI (Unchanged)
+   NAVIGATION
 ========================= */
 .nav { position: fixed; top: 0; left: 0; width: 100%; padding: 28px 6vw; display: flex; justify-content: space-between; align-items: center; transition: 0.4s ease; }
 .nav.scrolled { padding-top: 18px; padding-bottom: 18px; background: rgba(0,0,0,0.35); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.12); }
@@ -59,11 +53,17 @@ body { background: transparent; color: white; font-family: Arial, Helvetica, san
 .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; transition: 0.3s ease; }
 .nav-links a:hover { color: white; }
 
+/* =========================
+   GENERAL SECTIONS
+========================= */
 .section { min-height: 100vh; padding: 120px 8vw; display: flex; align-items: center; }
 .section-inner { width: 100%; max-width: 1300px; margin: auto; }
 .eyebrow { margin-bottom: 25px; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
 .section-title { max-width: 900px; font-size: clamp(45px, 7vw, 105px); line-height: 0.95; letter-spacing: -0.06em; }
 
+/* =========================
+   HERO
+========================= */
 .hero { min-height: 100vh; }
 .hero-content { max-width: 1100px; }
 .hero-kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
@@ -76,40 +76,45 @@ body { background: transparent; color: white; font-family: Arial, Helvetica, san
 .button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 25px; border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; color: white; text-decoration: none; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; transition: 0.3s ease; }
 .button:hover { transform: translateY(-3px); border-color: white; }
 .button.primary { background: white; color: #02040a; border-color: white; }
+.scroll-hint { position: absolute; bottom: 35px; left: 8vw; display: flex; align-items: center; gap: 12px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+.scroll-line { width: 40px; height: 1px; background: white; }
 
+/* =========================
+   ABOUT
+========================= */
 .about-grid { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 10vw; }
 .about-number { font-size: clamp(100px, 15vw, 220px); line-height: 0.8; color: rgba(255,255,255,0.12); font-weight: 800; letter-spacing: -0.08em; }
 .about-copy h3 { max-width: 700px; margin-top: 20px; font-size: clamp(30px, 4vw, 60px); line-height: 1.08; letter-spacing: -0.05em; }
 .about-copy p { max-width: 680px; margin-top: 25px; font-size: 16px; line-height: 1.9; color: rgba(255,255,255,0.68); }
 
+/* =========================
+   SKILLS & PROJECTS & EXPERIENCES
+========================= */
 .skills-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 60px; margin-top: 70px; border-top: 1px solid rgba(255,255,255,0.15); }
 .skill-item { padding: 30px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
 .skill-name { font-size: 24px; font-weight: 600; }
 .skill-detail { margin-top: 10px; font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.55); }
-
 .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 70px; }
 .project-card { position: relative; min-height: 350px; padding: 34px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); transition: 0.4s ease; }
 .project-card:hover { transform: translateY(-8px); background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.4); }
 .project-index { font-size: 11px; letter-spacing: 0.2em; color: rgba(255,255,255,0.5); }
 .project-card h3 { margin-top: 75px; font-size: clamp(28px, 3vw, 48px); line-height: 1; letter-spacing: -0.05em; }
 .project-card p { max-width: 430px; margin-top: 22px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.65); }
-
+.project-link { position: absolute; right: 34px; bottom: 30px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
 .experience-list { margin-top: 70px; border-top: 1px solid rgba(255,255,255,0.15); }
 .experience-item { display: grid; grid-template-columns: 180px 1fr; gap: 50px; padding: 35px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
 .experience-date { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
 .experience-role { font-size: clamp(24px, 3vw, 40px); letter-spacing: -0.04em; }
 .experience-company { margin-top: 8px; font-size: 13px; color: rgba(255,255,255,0.55); }
 .experience-description { max-width: 650px; margin-top: 18px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.65); }
-
 .contact-title { font-size: clamp(50px, 9vw, 140px); line-height: 0.9; letter-spacing: -0.08em; }
 .contact-title span { color: rgba(255,255,255,0.45); }
 .contact-text { max-width: 580px; margin-top: 30px; font-size: 17px; line-height: 1.8; color: rgba(255,255,255,0.68); }
 .contact-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 35px; }
-
 footer { display: flex; justify-content: space-between; padding: 28px 8vw; border-top: 1px solid rgba(255,255,255,0.12); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
 
 /* ANIMATION */
-.reveal { opacity: 0; transform: translateY(35px); transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal { opacity: 0; transform: translateY(35px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* MOBILE */
@@ -122,29 +127,32 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
 }
 </style>
 </head>
+
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-    <div class="loader-text">Loading Assets...</div>
-    <div class="loader-bar-bg"><div class="loader-fill" id="loader-fill"></div></div>
-</div>
-
-<!-- BACKGROUND CANVAS (Video is hidden, Canvas renders memory frames) -->
+<!-- BACKGROUND CANVAS & VIDEO -->
 <canvas id="video-canvas"></canvas>
+<!-- The Video is hidden. The Canvas draws the video frames perfectly. -->
 <video id="background-video" src="airport.mp4" muted playsinline preload="auto"></video>
 <div class="video-overlay"></div>
 
+<!-- SCROLL PROGRESS -->
 <div class="scroll-progress"><div id="progress-bar"></div></div>
 
+<!-- NAVIGATION -->
 <header class="nav" id="navbar">
     <a href="#home" class="logo">Selvendiran</a>
     <nav class="nav-links">
-        <a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#contact">Contact</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
     </nav>
 </header>
 
 <main>
+<!-- HERO -->
 <section class="section hero" id="home">
     <div class="section-inner hero-content">
         <div class="hero-kicker reveal">Data Engineer · Analyst · Builder</div>
@@ -155,170 +163,191 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
             <a href="#contact" class="button">Contact Me</a>
         </div>
     </div>
+    <div class="scroll-hint"><span class="scroll-line"></span>Scroll to explore</div>
 </section>
-<!-- ... (I have included the standard sections so the code works out of the box) ... -->
+
+<!-- ABOUT -->
 <section class="section" id="about">
     <div class="section-inner">
         <div class="about-grid">
             <div class="about-number reveal">01</div>
-            <div class="about-copy"><div class="eyebrow reveal">About me</div><h2 class="section-title reveal">Curiosity drives the work.</h2><p class="reveal">I am Selvendiran, an IT professional focused on data engineering, analytics, cloud technologies, and practical problem solving.</p></div>
+            <div class="about-copy">
+                <div class="eyebrow reveal">About me</div>
+                <h2 class="section-title reveal">Curiosity drives the work.</h2>
+                <p class="reveal">I am Selvendiran, an IT professional focused on data engineering, analytics, cloud technologies, and practical problem solving.</p>
+                <p class="reveal">My goal is to build systems that are simple to understand, efficient to operate, and valuable to the people using them.</p>
+            </div>
         </div>
     </div>
 </section>
+
+<!-- SKILLS -->
 <section class="section" id="skills">
     <div class="section-inner">
-        <div class="eyebrow reveal">Capabilities</div><h2 class="section-title reveal">Tools for turning questions into answers.</h2>
+        <div class="eyebrow reveal">Capabilities</div>
+        <h2 class="section-title reveal">Tools for turning questions into answers.</h2>
         <div class="skills-list">
             <div class="skill-item reveal"><div class="skill-name">SQL</div><div class="skill-detail">Query design, joins, aggregations, optimization, and analytical reporting.</div></div>
             <div class="skill-item reveal"><div class="skill-name">Python</div><div class="skill-detail">Data processing, automation, scripting, and analytical workflows.</div></div>
+            <div class="skill-item reveal"><div class="skill-name">Data Engineering</div><div class="skill-detail">ETL pipelines, data transformation, orchestration, and scalable architectures.</div></div>
+            <div class="skill-item reveal"><div class="skill-name">Cloud</div><div class="skill-detail">AWS services, storage, serverless computing, databases, and cloud-based solutions.</div></div>
+            <div class="skill-item reveal"><div class="skill-name">Data Analysis</div><div class="skill-detail">Finding patterns, measuring outcomes, and communicating insights clearly.</div></div>
+            <div class="skill-item reveal"><div class="skill-name">Problem Solving</div><div class="skill-detail">Breaking complex requirements into practical, maintainable solutions.</div></div>
         </div>
     </div>
 </section>
+
+<!-- PROJECTS -->
+<section class="section" id="projects">
+    <div class="section-inner">
+        <div class="eyebrow reveal">Selected work</div>
+        <h2 class="section-title reveal">Projects built with purpose.</h2>
+        <div class="projects-grid">
+            <article class="project-card reveal"><div class="project-index">01 / DATA</div><h3>Analytics<br>Workspace</h3><p>A structured analytics environment for exploring data, identifying trends, and supporting better decisions.</p><span class="project-link">Explore →</span></article>
+            <article class="project-card reveal"><div class="project-index">02 / CLOUD</div><h3>Cloud<br>Pipeline</h3><p>A scalable pipeline concept for collecting, transforming, storing, and delivering data.</p><span class="project-link">Explore →</span></article>
+            <article class="project-card reveal"><div class="project-index">03 / AUTOMATION</div><h3>Smart<br>Automation</h3><p>Automated workflows designed to reduce repetitive work and improve operational visibility.</p><span class="project-link">Explore →</span></article>
+            <article class="project-card reveal"><div class="project-index">04 / EXPERIMENT</div><h3>Future<br>Ideas</h3><p>Experiments combining artificial intelligence, data, and human-centered digital experiences.</p><span class="project-link">Explore →</span></article>
+        </div>
+    </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="section" id="experience">
+    <div class="section-inner">
+        <div class="eyebrow reveal">Experience</div>
+        <h2 class="section-title reveal">Learning by building.</h2>
+        <div class="experience-list">
+            <div class="experience-item reveal">
+                <div class="experience-date">Present</div>
+                <div><div class="experience-role">IT Professional</div><div class="experience-company">Cognizant Technology Solutions</div><p class="experience-description">Working across enterprise technology environments while developing skills in data, cloud platforms, and engineering practices.</p></div>
+            </div>
+            <div class="experience-item reveal">
+                <div class="experience-date">Continuous</div>
+                <div><div class="experience-role">Data Engineering Journey</div><div class="experience-company">SQL · Python · AWS · Analytics</div><p class="experience-description">Building practical knowledge through projects, experiments, and continuous learning.</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
 <section class="section" id="contact">
     <div class="section-inner">
-        <div class="eyebrow reveal">Contact</div><h2 class="contact-title reveal">Let's build<br><span>something useful.</span></h2>
+        <div class="eyebrow reveal">Contact</div>
+        <h2 class="contact-title reveal">Let's build<br><span>something useful.</span></h2>
+        <p class="contact-text reveal">Interested in data, technology, and meaningful digital experiences? Feel free to connect.</p>
         <div class="contact-links reveal">
             <a class="button primary" href="mailto:your.email@example.com">Email Me</a>
             <a class="button" href="https://github.com/selva0604200" target="_blank">GitHub</a>
+            <a class="button" href="https://www.linkedin.com" target="_blank">LinkedIn</a>
         </div>
     </div>
 </section>
 </main>
 
-<footer><span>© 2026 Selvendiran</span><span>Built with curiosity.</span></footer>
+<footer>
+    <span>© 2026 Selvendiran</span>
+    <span>Built with curiosity.</span>
+</footer>
 
-<!-- LENIS SMOOTH SCROLL PHYSICS -->
+<!-- 1. IMPORT LENIS FOR BUTTERY SMOOTH PAGE SCROLLING -->
 <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
 
 <script>
 /* =========================================================
-   THE "GOD-TIER" IN-MEMORY FRAME EXTRACTOR
+   THE ULTIMATE, CLEANEST VIDEO SCRUBBER
 ========================================================= */
 
-// 1. Lenis Smooth Scroll
+// --- 1. SETUP SMOOTH SCROLL (LENIS) ---
+// This turns rigid mouse-wheel clicks into a beautiful, gliding animation.
 const lenis = new Lenis({
-    duration: 1.5,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Apple-like easing
     smoothWheel: true,
 });
-function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+
+let scrollProgress = 0; // A number from 0.00 to 1.00
+
+lenis.on('scroll', (e) => {
+    // Lenis gives us a perfectly smooth progress number as the page glides
+    scrollProgress = Math.max(0, Math.min(e.progress, 1));
+});
+
+function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+}
 requestAnimationFrame(raf);
 
-
-// 2. Variables
+// --- 2. SETUP VIDEO & CANVAS ---
 const video = document.getElementById("background-video");
 const canvas = document.getElementById("video-canvas");
 const ctx = canvas.getContext("2d");
-const loaderFill = document.getElementById("loader-fill");
-const loader = document.getElementById("loader");
+const progressBar = document.getElementById("progress-bar");
+const navbar = document.getElementById("navbar");
 
-// We will store every single frame of the video as an image in this array!
-const frames = []; 
-let isExtracted = false;
+let isSeeking = false; // The absolute most important variable to stop stuttering
 
-// 3. Extract the Video into RAM
-async function extractFrames() {
-    video.muted = true;
-    video.playsInline = true;
-    
-    // Play video at 2x speed so the loading screen finishes faster
-    video.playbackRate = 2.0; 
-    
-    try {
-        await video.play();
-    } catch (e) {
-        console.warn("Autoplay blocked. User interaction needed.");
-        loader.innerHTML = `<div class='button primary' onclick='extractFrames()'>Click to Load Experience</div>`;
-        return;
-    }
-
-    const processFrame = async () => {
-        // Update Loading Bar based on video progress
-        const percent = (video.currentTime / video.duration) * 100;
-        loaderFill.style.width = percent + "%";
-
-        // Stop extracting when video ends
-        if (video.ended) {
-            isExtracted = true;
-            loader.classList.add("hidden"); // Hide loader
-            resizeCanvas(); // Draw first frame
-            return;
-        }
-
-        // Capture the frame directly into computer memory (super fast)
-        try {
-            const bitmap = await createImageBitmap(video);
-            frames.push(bitmap);
-        } catch(e) {}
-
-        // Schedule next capture
-        if ('requestVideoFrameCallback' in video) {
-            video.requestVideoFrameCallback(processFrame);
-        } else {
-            requestAnimationFrame(processFrame); // Fallback for older browsers
-        }
-    };
-
-    // Start extraction loop
-    if ('requestVideoFrameCallback' in video) {
-        video.requestVideoFrameCallback(processFrame);
-    } else {
-        requestAnimationFrame(processFrame);
-    }
-}
-
-// Start immediately when metadata is ready
-video.addEventListener("loadedmetadata", extractFrames);
-
-// 4. Draw Frames on Canvas (Object-Fit: Cover)
-function drawFrame(frameIndex) {
-    if (!isExtracted || frames.length === 0) return;
-    
-    const frame = frames[frameIndex];
-    const cw = canvas.width;
-    const ch = canvas.height;
-    const vw = frame.width;
-    const vh = frame.height;
-    
-    const ratio = Math.max(cw / vw, ch / vh);
-    const cx = (cw - vw * ratio) / 2;
-    const cy = (ch - vh * ratio) / 2;
-
-    ctx.clearRect(0, 0, cw, ch);
-    ctx.drawImage(frame, 0, 0, vw, vh, cx, cy, vw * ratio, vh * ratio);
-}
-
+// Resize the canvas to perfectly cover the screen (Object-Fit: Cover)
 function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
-    
-    // Draw current frame based on scroll
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = Math.max(0, Math.min(window.scrollY / maxScroll, 1));
-    const index = Math.min(frames.length - 1, Math.floor(progress * frames.length));
-    drawFrame(index || 0);
+    drawFrame();
 }
+
+// Draw the current video frame onto the canvas
+function drawFrame() {
+    if (video.videoWidth) {
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const vw = video.videoWidth;
+        const vh = video.videoHeight;
+        
+        const ratio = Math.max(cw / vw, ch / vh);
+        const cx = (cw - vw * ratio) / 2;
+        const cy = (ch - vh * ratio) / 2;
+
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.drawImage(video, 0, 0, vw, vh, cx, cy, vw * ratio, vh * ratio);
+    }
+}
+
+// When the video finishes finding the frame, unlock the seeker and draw it!
+video.addEventListener("seeked", () => {
+    isSeeking = false;
+    drawFrame();
+});
+
+// --- 3. THE MAGIC SYNC LOOP ---
+// We match the video directly to the Lenis smooth-scroll progress. 
+function syncVideo() {
+    if (video.readyState >= 2) {
+        const targetTime = scrollProgress * video.duration;
+
+        // Update the Progress Bar UI
+        progressBar.style.width = `${scrollProgress * 100}%`;
+
+        // Update the Navbar UI
+        if (window.scrollY > 40) navbar.classList.add("scrolled");
+        else navbar.classList.remove("scrolled");
+
+        // ONLY request a new frame if we are out of sync AND the browser isn't busy seeking
+        if (!isSeeking && Math.abs(video.currentTime - targetTime) > 0.02) {
+            isSeeking = true; // Lock it!
+            video.currentTime = targetTime; // Snap to the smooth target time
+        }
+    }
+    
+    requestAnimationFrame(syncVideo);
+}
+
+// Start everything when the video is ready
+video.addEventListener("loadedmetadata", () => {
+    resizeCanvas();
+    requestAnimationFrame(syncVideo);
+});
 window.addEventListener("resize", resizeCanvas);
 
-// 5. Connect Lenis Scroll Directly to Array Index
-lenis.on('scroll', (e) => {
-    const progress = Math.max(0, Math.min(e.progress, 1));
-    
-    // Update progress bar
-    document.getElementById('progress-bar').style.width = `${progress * 100}%`;
-    
-    // Navbar visual update
-    const navbar = document.getElementById("navbar");
-    if (window.scrollY > 40) navbar.classList.add("scrolled");
-    else navbar.classList.remove("scrolled");
-
-    // Instantly draw the correct frame from memory! NO VIDEO DECODING!
-    if (isExtracted && frames.length > 0) {
-        const frameIndex = Math.min(frames.length - 1, Math.floor(progress * frames.length));
-        drawFrame(frameIndex);
-    }
-});
 
 /* =========================
    TEXT REVEAL ANIMATIONS
@@ -331,5 +360,6 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 revealElements.forEach(el => observer.observe(el));
 </script>
+
 </body>
 </html>
