@@ -20,14 +20,9 @@ body { background: transparent; color: white; font-family: Arial, Helvetica, san
    CANVAS BACKGROUND (FRAME BY FRAME)
 ========================= */
 #video-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    z-index: 0;
-    pointer-events: none;
-    transform: translateZ(0); /* Hardware acceleration */
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 0; pointer-events: none; transform: translateZ(0);
 }
-
 .video-overlay {
     position: fixed; inset: 0; z-index: 1; pointer-events: none;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.2) 45%, rgba(0, 0, 0, 0.65));
@@ -257,16 +252,16 @@ const progressBar = document.getElementById("progress-bar");
 const navbar = document.getElementById("navbar");
 
 // --- CONFIGURATION ---
-// IMPORTANT: Change this number to match exactly how many image frames you have.
+// IMPORTANT: Update this number to match the exact number of images in your frames folder!
 const frameCount = 150; 
-// Change this function to match your folder and file naming structure.
-// Example: "frames/frame_0001.jpg"
+
+// Formats the image name exactly how EZGIF generated them (e.g. ezgif-frame-001.jpg)
 const currentFrame = index => (
-    `frames/frame_${(index + 1).toString().padStart(4, '0')}.jpg`
+    `frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.jpg`
 );
 
 const images = [];
-const sequence = { frame: 0 }; // Object for GSAP to animate
+const sequence = { frame: 0 }; 
 
 // 3. Preload Images into RAM
 for (let i = 0; i < frameCount; i++) {
@@ -310,11 +305,11 @@ function resizeCanvas() {
     render();
 }
 window.addEventListener("resize", resizeCanvas);
-resizeCanvas(); // Initial call
+resizeCanvas(); 
 
 // 5. Link Scroll to Frame Animation
 gsap.to(sequence, {
-    frame: frameCount - 1, // Animate from frame 0 to frame 149
+    frame: frameCount - 1, 
     snap: "frame", // Ensures we land on whole numbers (no half-frames)
     ease: "none",
     scrollTrigger: {
