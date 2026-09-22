@@ -51,7 +51,7 @@
         }
 
         /* =========================
-           BACKGROUND CANVAS
+           BACKGROUND CANVAS & OVERLAY
         ========================= */
         #video-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -62,7 +62,7 @@
         }
         .video-overlay {
             position: fixed; inset: 0; z-index: 1; pointer-events: none;
-            background: rgba(0, 0, 0, 0.08);
+            background: rgba(0, 0, 0, 0.12);
         }
 
         .ui-layer {
@@ -77,7 +77,7 @@
             position: fixed; top: 0; width: 100%; height: 52px;
             padding: 0 clamp(1.25rem, 5vw, 5rem);
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(10, 14, 22, 0.35) !important; 
+            background: rgba(10, 14, 22, 0.45) !important; 
             border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
             z-index: 100;
             backdrop-filter: blur(16px) saturate(180%);
@@ -102,7 +102,7 @@
         }
         .nav-links a:hover, .nav-links a:focus { color: var(--accent); outline: none; }
 
-        /* Resume Button */
+        /* Resume Glass Pill */
         .nav-right .btn-primary {
             position:relative;
             isolation:isolate;
@@ -132,7 +132,7 @@
             position: fixed; top: 52px; left: 0; width: 100%; max-height: calc(100dvh - 52px);
             overflow-y: auto; overscroll-behavior: contain; padding: 3rem clamp(2rem, 7vw, 7rem) 3.5rem;
             display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: clamp(2rem, 4vw, 4rem);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03)), rgba(10, 14, 22, 0.88);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03)), rgba(10, 14, 22, 0.92);
             border-bottom: 1px solid rgba(255,255,255,.2);
             backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%);
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -163,7 +163,7 @@
         .mega-feature-item span { color: var(--text-muted); font-size: 0.82rem; }
 
         .mega-cta { border-left: 1px solid rgba(255,255,255,.14); padding-left: clamp(1.5rem, 3vw, 3rem); }
-        .mega-button { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1.2rem; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; color: #fff; text-decoration: none; font-size: .85rem; transition: all .25s ease; }
+        .mega-button { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1.2rem; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; color: #fff; text-decoration: none; font-size: .85rem; transition: all .25s ease; background: rgba(255,255,255,0.06); }
         .mega-button:hover { background: #fff; color: #000; border-color: #fff; }
 
         /* =========================
@@ -203,14 +203,15 @@
         @keyframes pulseOpacity { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; color: #fff; } }
 
         /* =========================
-           TRANSPARENT SECTIONS WITH INDIVIDUAL GLASS CARDS
+           CLEAN SECTIONS & GLASS CARDS
         ========================= */
         .content-wrapper { background: transparent; position: relative; z-index: 10; padding-top: 2vh; padding-bottom: 6rem; min-height: 100vh; }
 
+        /* Outer sections remain completely invisible/transparent */
         section { 
-            padding: 2rem 0; 
+            padding: 1.5rem 0; 
             max-width: 1100px; 
-            margin: 0 auto 4rem; 
+            margin: 0 auto 3.5rem; 
             position: relative;
             background: transparent !important;
             border: none !important;
@@ -236,28 +237,32 @@
             text-shadow: 0 2px 8px rgba(0,0,0,0.9); 
         }
 
-        /* Glass Cards for Experience Items */
-        .experience-item { 
+        /* Generic Liquid Glass Panel */
+        .glass-panel {
             position: relative; 
             z-index: 2; 
-            display: grid; 
-            grid-template-columns: 1fr 2.5fr; 
-            gap: 3rem; 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.05) 100%), rgba(0, 0, 0, 0.12);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.05) 100%), rgba(0, 0, 0, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.28);
+            border-top: 1px solid rgba(255, 255, 255, 0.65);
             border-radius: 22px;
             padding: 2.2rem 2.5rem;
             margin-bottom: 1.8rem;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(6px) saturate(140%);
-            -webkit-backdrop-filter: blur(6px) saturate(140%);
+            backdrop-filter: blur(8px) saturate(140%);
+            -webkit-backdrop-filter: blur(8px) saturate(140%);
             transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
         }
-
-        .experience-item:hover {
+        .glass-panel:hover {
             border-color: rgba(255, 255, 255, 0.45);
             transform: translateY(-3px);
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.85);
+        }
+
+        /* Specific Glass Layouts */
+        .experience-item { 
+            display: grid; 
+            grid-template-columns: 1fr 2.5fr; 
+            gap: 3rem; 
         }
 
         .exp-meta h3 { color: #ffffff; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.4rem; letter-spacing: -0.02em; line-height: 1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
@@ -271,7 +276,7 @@
         .tech-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
         .tech-tag { 
             background: rgba(0, 0, 0, 0.35); 
-            border: 1px solid rgba(255, 255, 255, 0.25); 
+            border: 1px solid rgba(255, 255, 255, 0.28); 
             color: #ffffff; 
             padding: 0.45rem 1.1rem; 
             border-radius: 980px; 
@@ -285,24 +290,30 @@
         }
         .tech-tag:hover { border-color: rgba(255,255,255,0.6); background: rgba(0,0,0,0.6); transform: translateY(-1px); }
 
-        /* Liquid Glass Cert Cards */
-        .cert-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        /* Stack Grid Details */
+        .stack-group { margin-bottom: 1.8rem; }
+        .stack-group:last-child { margin-bottom: 0; }
+        .stack-group-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.7); margin-bottom: 0.8rem; font-weight: 600; }
+
+        /* Liquid Glass Cert Cards Grid */
+        .cert-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
         .cert-card { 
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.05) 100%), rgba(0, 0, 0, 0.12); 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.05) 100%), rgba(0, 0, 0, 0.15); 
             border: 1px solid rgba(255, 255, 255, 0.28); 
+            border-top: 1px solid rgba(255, 255, 255, 0.65);
             padding: 1.8rem; 
             border-radius: 20px; 
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(6px) saturate(140%);
-            -webkit-backdrop-filter: blur(6px) saturate(140%);
+            backdrop-filter: blur(8px) saturate(140%);
+            -webkit-backdrop-filter: blur(8px) saturate(140%);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
             text-decoration: none;
         }
         .cert-card:hover { 
-            border-color: rgba(255, 255, 255, 0.45); 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 50%), rgba(0, 0, 0, 0.22); 
+            border-color: rgba(255, 255, 255, 0.48); 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.04) 50%), rgba(0, 0, 0, 0.25); 
             transform: translateY(-4px);
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.85);
         }
@@ -312,17 +323,23 @@
         .cert-link { color: var(--accent); font-size: 0.85rem; font-weight: 500; text-decoration: none; text-shadow: 0 1px 3px rgba(0,0,0,0.9); }
         .cert-link:hover { text-decoration: underline; }
 
-        /* Social Glass Buttons */
-        .contact-links { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
+        /* Social Contact Section Buttons */
+        .contact-card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .contact-links { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.5rem; }
         .contact-links .contact-link { 
             display: inline-flex; 
             align-items: center; 
             gap: .65rem; 
             min-height: 3.2rem; 
             padding: .7rem 1.4rem; 
-            border: 1px solid rgba(255, 255, 255, 0.3); 
+            border: 1px solid rgba(255, 255, 255, 0.35); 
+            border-top: 1px solid rgba(255, 255, 255, 0.65);
             border-radius: 999px; 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03)); 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.03)); 
             color: #fff; 
             text-decoration: none; 
             transition: all .25s ease; 
@@ -350,8 +367,9 @@
             .mega-menu { top: 48px; max-height: calc(100dvh - 48px); }
             .apple-hero { padding-top: 6.5rem; }
             .apple-hero-title { font-size: clamp(2.8rem, 11vw, 4.5rem) !important; }
-            section { padding: 1.5rem 0; }
-            .experience-item { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem; }
+            section { padding: 1rem 0; }
+            .glass-panel { padding: 1.5rem; }
+            .experience-item { grid-template-columns: 1fr; gap: 1.5rem; }
         }
         @media (max-width: 700px) {
             .nav-left { width: 100%; justify-content: space-between; }
@@ -587,9 +605,10 @@
         </div>
 
         <div class="content-wrapper">
+            <!-- SECTION 01: THE VISION -->
             <section id="about">
                 <div class="section-header"><h2>01 / The Vision</h2></div>
-                <div class="experience-item">
+                <div class="glass-panel experience-item">
                     <div class="exp-meta">
                         <h3>Lead Data Architect Trajectory</h3>
                         <p>Enterprise Data Systems</p>
@@ -606,13 +625,15 @@
                 </div>
             </section>
 
+            <!-- SECTION 02: EXPERIENCE -->
             <section id="experience">
                 <div class="section-header"><h2>02 / Experience</h2></div>
-                <div class="experience-item">
+                
+                <div class="glass-panel experience-item">
                     <div class="exp-meta">
                         <h3>Cognizant</h3>
                         <p>Data Engineer</p>
-                        <p style="margin-top:.3rem;font-size:.9rem;color:var(--text-muted);">Dec 2025 – Present · Chennai, Tamil Nadu, India · Hybrid</p>
+                        <p style="margin-top:.3rem;font-size:.9rem;color:rgba(255,255,255,0.7);">Dec 2025 – Present · Chennai, Tamil Nadu, India · Hybrid</p>
                     </div>
                     <div class="exp-details">
                         <ul class="experience-list">
@@ -634,11 +655,11 @@
                     </div>
                 </div>
                 
-                <div class="experience-item">
+                <div class="glass-panel experience-item">
                     <div class="exp-meta">
                         <h3>Program Analyst Trainee</h3>
                         <p>Cognizant</p>
-                        <p style="margin-top:.3rem;font-size:.9rem;color:var(--text-muted);">Dec 2024 – Dec 2025 · 1 yr 1 mo</p>
+                        <p style="margin-top:.3rem;font-size:.9rem;color:rgba(255,255,255,0.7);">Dec 2024 – Dec 2025 · 1 yr 1 mo</p>
                     </div>
                     <div class="exp-details">
                         <ul class="experience-list">
@@ -656,11 +677,11 @@
                     </div>
                 </div>
 
-                <div class="experience-item">
+                <div class="glass-panel experience-item">
                     <div class="exp-meta">
                         <h3>Accounts Receivable Caller</h3>
                         <p>Omega Healthcare Management Services · Full-time</p>
-                        <p style="margin-top:.3rem;font-size:.9rem;color:var(--text-muted);">Jun 2023 – Nov 2024 · 1 yr 6 mos · Tamil Nadu, India · On-site</p>
+                        <p style="margin-top:.3rem;font-size:.9rem;color:rgba(255,255,255,0.7);">Jun 2023 – Nov 2024 · 1 yr 6 mos · Tamil Nadu, India · On-site</p>
                     </div>
                     <div class="exp-details">
                         <ul class="experience-list">
@@ -677,17 +698,19 @@
                 </div>
             </section>
 
+            <!-- SECTION 03: INFRASTRUCTURE STACK -->
             <section id="skills">
                 <div class="section-header"><h2>03 / Infrastructure Stack</h2></div>
-                <div class="experience-item">
-                    <div class="exp-meta">
+                <div class="glass-panel">
+                    <div class="exp-meta" style="margin-bottom: 1.5rem;">
                         <h3>Tools I Build With</h3>
                         <p>Core Engineering Stack</p>
                     </div>
                     <div class="exp-details">
-                        <p>A focused toolkit for engineering dependable distributed pipelines, cloud data platforms, and automated workflow DAGs.</p>
-                        <div style="margin-top: 1.8rem;">
-                            <p style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 600;">Compute &amp; Data Processing</p>
+                        <p style="margin-bottom: 1.5rem;">A focused toolkit for engineering dependable distributed pipelines, cloud data platforms, and automated workflow DAGs.</p>
+                        
+                        <div class="stack-group">
+                            <div class="stack-group-title">Compute &amp; Data Processing</div>
                             <div class="tech-list">
                                 <span class="tech-tag">Apache Spark (PySpark)</span>
                                 <span class="tech-tag">Python</span>
@@ -695,16 +718,18 @@
                                 <span class="tech-tag">C / C++</span>
                             </div>
                         </div>
-                        <div style="margin-top: 1.8rem;">
-                            <p style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 600;">Orchestration &amp; Streaming</p>
+
+                        <div class="stack-group">
+                            <div class="stack-group-title">Orchestration &amp; Streaming</div>
                             <div class="tech-list">
                                 <span class="tech-tag">Apache Airflow</span>
                                 <span class="tech-tag">Apache Kafka</span>
                                 <span class="tech-tag">Event-Driven Pipelines</span>
                             </div>
                         </div>
-                        <div style="margin-top: 1.8rem;">
-                            <p style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 600;">Cloud &amp; Warehousing</p>
+
+                        <div class="stack-group">
+                            <div class="stack-group-title">Cloud &amp; Warehousing</div>
                             <div class="tech-list">
                                 <span class="tech-tag">AWS (S3, Glue)</span>
                                 <span class="tech-tag">Azure Data Factory</span>
@@ -718,6 +743,7 @@
                 </div>
             </section>
 
+            <!-- SECTION 04: CERTIFICATIONS & RECOGNITIONS -->
             <section id="certs">
                 <div class="section-header"><h2>04 / Certifications &amp; Recognitions</h2></div>
                 <div class="cert-grid">
@@ -748,10 +774,10 @@
                 </div>
             </section>
 
-            <!-- SECTION 05: CONNECT LINKS -->
+            <!-- SECTION 05: CONTACT -->
             <section id="contact">
                 <div class="section-header"><h2>05 / Initiate Sequence</h2></div>
-                <div class="experience-item">
+                <div class="glass-panel contact-card-content">
                     <div class="exp-meta">
                         <h3>Let's Connect</h3>
                         <p>Open for Data Engineering Roles</p>
@@ -817,11 +843,11 @@
 })();
 </script>
 
-<!-- SMOOTH FLUID VIDEO SCROLL ENGINE (NO FLIPBOOK / NO 1-BY-1 JUMPS) -->
+<!-- CANVAS ENGINE WITH HARDWARE ACCELERATION -->
 <script>
 /* 1. Lenis Smooth Scroll Engine */
 const lenis = new Lenis({ 
-    duration: 1.0, 
+    duration: 0.8, 
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
     smoothWheel: true 
 });
@@ -852,7 +878,7 @@ for (let i = 0; i < frameCount; i++) {
     images.push(img);
 }
 
-/* 4. Decoupled 60fps Render Loop with Sub-Frame Interpolation */
+/* 4. Decoupled 60fps Render Loop */
 let lastRenderedFrame = -1;
 
 function drawFrame() {
@@ -890,7 +916,7 @@ window.addEventListener("resize", () => {
 });
 window.dispatchEvent(new Event('resize')); 
 
-/* 5. Smooth Scroll Interpolation (Removed snap: "frame" & Increased scrub to 0.5s) */
+/* 5. Smooth Scroll Interpolation */
 gsap.to(sequence, {
     frame: frameCount - 1, 
     ease: "none",
@@ -898,7 +924,7 @@ gsap.to(sequence, {
         trigger: document.body, 
         start: "top top", 
         end: "bottom bottom", 
-        scrub: 0.5 /* Smooth glide between scroll ticks */
+        scrub: 0.5 
     }
 });
 </script>
