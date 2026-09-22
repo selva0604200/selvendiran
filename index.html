@@ -3,14 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="Selvendiran S - Lead Data Engineer Portfolio. Specializing in enterprise ETL/ELT pipelines, distributed compute, and modern cloud architectures." name="description"/>
+<meta content="Selvendiran S - Lead Data Engineer Portfolio." name="description"/>
 <title>Selvendiran S | Data Engineer</title>
 <meta name="theme-color" content="#000000">
-<meta name="robots" content="index,follow">
-<meta property="og:title" content="Selvendiran S | Data Engineer">
-<meta property="og:description" content="Data Engineer portfolio showcasing cloud data pipelines, analytics, ETL/ELT, and modern engineering projects.">
-<meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23000'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Arial' font-size='34' font-weight='700' fill='%232997ff'%3ES%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -23,8 +18,6 @@
             --text-sub: #f0f0f5;
             --accent: #2997ff;
             --apple-blue: #0071e3;
-            --apple-hover: #0077ed;
-            --font-mono: 'JetBrains Mono', monospace;
         }
 
         * {
@@ -33,13 +26,11 @@
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         html { scroll-behavior: auto !important; background: #000; }
         html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
 
         body {
             background-color: #000;
@@ -51,18 +42,18 @@
         }
 
         /* =========================
-           BACKGROUND CANVAS
+           HIGH-PERFORMANCE CANVAS
         ========================= */
         #video-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 0; pointer-events: none; 
             transform: translateZ(0);
             backface-visibility: hidden;
-            opacity: 1;
+            will-change: contents;
         }
         .video-overlay {
             position: fixed; inset: 0; z-index: 1; pointer-events: none;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.12);
         }
 
         .ui-layer {
@@ -77,19 +68,15 @@
             position: fixed; top: 0; width: 100%; height: 52px;
             padding: 0 clamp(1.25rem, 5vw, 5rem);
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(10, 14, 22, 0.35) !important; 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(10, 14, 22, 0.65) !important; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18) !important;
             z-index: 100;
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .nav-left { display: flex; align-items: center; gap: 3rem; }
         .logo { 
             font-weight: 600; font-size: 0.95rem; color: #ffffff; text-decoration: none; 
             letter-spacing: -0.02em; transition: opacity 0.25s ease;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
         }
         .logo:hover { opacity: 0.7; }
         
@@ -98,44 +85,23 @@
         .nav-links a { 
             color: #ffffff; text-decoration: none; font-size: 0.8rem; 
             font-weight: 500; transition: color 0.25s ease;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
         .nav-links a:hover, .nav-links a:focus { color: var(--accent); outline: none; }
 
-        /* Resume Glass Button */
         .nav-right .btn-primary {
-            position:relative;
-            isolation:isolate;
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            min-height:36px;
-            padding:0 18px;
-            border:1px solid rgba(255,255,255,.4);
-            border-radius:999px;
-            background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(225,231,240,.88));
-            color:#0a0d13;
-            font-size:.76rem;
-            font-weight:650;
-            letter-spacing:.015em;
-            text-decoration: none;
-            box-shadow: 0 1px 0 rgba(255,255,255,1) inset, 0 8px 20px rgba(0,0,0,0.3);
-            transition: transform .3s ease, background .3s ease, box-shadow .3s ease;
+            display:inline-flex; align-items:center; justify-content:center;
+            min-height:36px; padding:0 18px; border:1px solid rgba(255,255,255,.4);
+            border-radius:999px; background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(225,231,240,.88));
+            color:#0a0d13; font-size:.76rem; font-weight:650; letter-spacing:.015em;
+            text-decoration: none; transition: transform .2s ease;
         }
-        .nav-right .btn-primary:hover {
-            background: #ffffff;
-            transform: translateY(-1px);
-            box-shadow: 0 1px 0 rgba(255,255,255,1) inset, 0 12px 28px rgba(0,0,0,0.4);
-        }
+        .nav-right .btn-primary:hover { transform: translateY(-1px); }
 
         .mega-menu {
             position: fixed; top: 52px; left: 0; width: 100%; max-height: calc(100dvh - 52px);
             overflow-y: auto; overscroll-behavior: contain; padding: 3rem clamp(2rem, 7vw, 7rem) 3.5rem;
             display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: clamp(2rem, 4vw, 4rem);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03)), rgba(10, 14, 22, 0.88);
-            border-bottom: 1px solid rgba(255,255,255,.2);
-            backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            background: rgba(10, 14, 22, 0.92); border-bottom: 1px solid rgba(255,255,255,.2);
             opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-8px);
             transition: opacity .22s ease, transform .22s ease, visibility 0s linear .22s;
             z-index: 99;
@@ -191,9 +157,9 @@
             background: #ffffff; color: #000000; padding: 0.75rem 1.6rem; border-radius: 980px; font-size: 0.95rem; font-weight: 600; text-decoration: none; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.4); transition: all 0.25s ease; 
         }
-        .apple-btn-primary:hover { background: #f5f5f7; transform: scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
-        .apple-btn-link { color: var(--accent); font-size: 0.95rem; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; transition: opacity 0.2s ease; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
-        .apple-btn-link:hover { text-decoration: underline; opacity: 0.85; }
+        .apple-btn-primary:hover { background: #f5f5f7; transform: scale(1.02); }
+        .apple-btn-link { color: var(--accent); font-size: 0.95rem; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
+        .apple-btn-link:hover { text-decoration: underline; }
 
         .scroll-indicator {
             position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
@@ -203,11 +169,10 @@
         @keyframes pulseOpacity { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; color: #fff; } }
 
         /* =========================
-           SECTIONS (OUTER BIG BOX REMOVED)
+           ZERO-LAG GLASS CARDS (NO BACKDROP-FILTER)
         ========================= */
         .content-wrapper { background: transparent; position: relative; z-index: 10; padding-top: 2vh; padding-bottom: 6rem; min-height: 100vh; }
 
-        /* The section itself is now transparent so background video is 100% visible */
         section { 
             padding: 2rem 0; 
             max-width: 1100px; 
@@ -216,8 +181,6 @@
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
             scroll-margin-top: 5rem;
         }
 
@@ -237,9 +200,7 @@
             text-shadow: 0 2px 8px rgba(0,0,0,0.9); 
         }
 
-        /* =========================
-           INDIVIDUAL LIQUID GLASS CARDS (SMALL BOXES)
-        ========================= */
+        /* Pure GPU Glass Cards */
         .experience-item { 
             position: relative; 
             z-index: 2; 
@@ -247,22 +208,22 @@
             grid-template-columns: 1fr 2.5fr; 
             gap: 3rem; 
             
-            /* Glass Card Styling for Experience Items */
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 100%), rgba(10, 14, 22, 0.42);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            /* High-Performance Glass Gradient with Top Highlight Edge */
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.03) 40%, rgba(10, 14, 22, 0.45) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            border-top: 1px solid rgba(255, 255, 255, 0.65); /* Specular glare top border */
             border-radius: 22px;
             padding: 2.2rem 2.5rem;
             margin-bottom: 1.8rem;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px) saturate(160%);
-            -webkit-backdrop-filter: blur(12px) saturate(160%);
-            transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            contain: content;
         }
 
         .experience-item:hover {
-            border-color: rgba(255, 255, 255, 0.45);
+            border-color: rgba(255, 255, 255, 0.55);
             transform: translateY(-3px);
-            box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 28px 60px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.8);
         }
 
         .exp-meta h3 { color: #ffffff; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.4rem; letter-spacing: -0.02em; line-height: 1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
@@ -275,49 +236,45 @@
 
         .tech-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
         .tech-tag { 
-            background: rgba(0, 0, 0, 0.35); 
-            border: 1px solid rgba(255, 255, 255, 0.28); 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.4)); 
+            border: 1px solid rgba(255, 255, 255, 0.32); 
+            border-top: 1px solid rgba(255, 255, 255, 0.6);
             color: #ffffff; 
             padding: 0.45rem 1.1rem; 
             border-radius: 980px; 
             font-size: 0.8rem; 
             font-weight: 500; 
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 4px 12px rgba(0,0,0,0.3);
-            transition: all 0.25s ease; 
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.2s ease; 
             text-shadow: 0 1px 3px rgba(0,0,0,0.9);
         }
-        .tech-tag:hover { border-color: rgba(255,255,255,0.6); background: rgba(0,0,0,0.6); transform: translateY(-1px); }
+        .tech-tag:hover { border-color: rgba(255,255,255,0.7); transform: translateY(-1px); }
 
-        /* Liquid Glass Cert Cards */
         .cert-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .cert-card { 
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 100%), rgba(10, 14, 22, 0.45); 
-            border: 1px solid rgba(255, 255, 255, 0.25); 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(10, 14, 22, 0.45) 100%); 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            border-top: 1px solid rgba(255, 255, 255, 0.65);
             padding: 1.8rem; 
             border-radius: 20px; 
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px) saturate(160%);
-            -webkit-backdrop-filter: blur(12px) saturate(160%);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.25s ease; 
             text-decoration: none;
+            contain: content;
         }
         .cert-card:hover { 
-            border-color: rgba(255, 255, 255, 0.48); 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%), rgba(12, 18, 28, 0.55); 
+            border-color: rgba(255, 255, 255, 0.55); 
             transform: translateY(-4px);
-            box-shadow: 0 22px 50px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 22px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.8);
         }
-        .cert-icon { display:flex;align-items:center;justify-content:center;width:2.8rem;height:2.8rem;border-radius:.7rem;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);font-weight:700;color:#fff; margin-bottom: 1rem; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4); }
+        .cert-icon { display:flex;align-items:center;justify-content:center;width:2.8rem;height:2.8rem;border-radius:.7rem;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);font-weight:700;color:#fff; margin-bottom: 1rem; box-shadow: inset 0 1px 0 rgba(255,255,255,0.5); }
         .cert-card h3 { color: #fff; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; line-height: 1.3; text-shadow: 0 1px 4px rgba(0,0,0,0.9); }
         .cert-card p { color: #f0f0f5; font-size: 0.88rem; line-height: 1.45; margin-bottom: 0.8rem; text-shadow: 0 1px 3px rgba(0,0,0,0.9); }
         .cert-link { color: var(--accent); font-size: 0.85rem; font-weight: 500; text-decoration: none; text-shadow: 0 1px 3px rgba(0,0,0,0.9); }
         .cert-link:hover { text-decoration: underline; }
 
-        /* Liquid Glass Social Buttons */
         .contact-links { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
         .contact-links .contact-link { 
             display: inline-flex; 
@@ -325,22 +282,20 @@
             gap: .65rem; 
             min-height: 3.2rem; 
             padding: .7rem 1.4rem; 
-            border: 1px solid rgba(255, 255, 255, 0.3); 
+            border: 1px solid rgba(255, 255, 255, 0.35); 
+            border-top: 1px solid rgba(255, 255, 255, 0.65);
             border-radius: 999px; 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.03)); 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.04)); 
             color: #fff; 
             text-decoration: none; 
-            transition: all .25s ease; 
+            transition: all .2s ease; 
             box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             text-shadow: 0 1px 4px rgba(0,0,0,0.9);
         }
         .contact-links .contact-link:hover { 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.08)); 
-            border-color: rgba(255,255,255,.6); 
+            border-color: rgba(255,255,255,.7); 
             transform: translateY(-2px); 
-            box-shadow: 0 14px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.7);
+            box-shadow: 0 14px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.8);
         }
         .contact-links .contact-link svg { width: 1.4rem; height: 1.4rem; display: block; fill: currentColor; }
         
@@ -822,7 +777,7 @@
 })();
 </script>
 
-<!-- CANVAS ENGINE WITH HARDWARE ACCELERATION -->
+<!-- OPTIMIZED CANVAS ENGINE WITH NO CANVAS-SCALING LAG -->
 <script>
 /* 1. Lenis Smooth Scroll Engine */
 const lenis = new Lenis({ 
@@ -857,7 +812,7 @@ for (let i = 0; i < frameCount; i++) {
     images.push(img);
 }
 
-/* 4. Decoupled Render Loop */
+/* 4. Decoupled Render Loop (Capped Resolution to eliminate lag) */
 let lastRenderedFrame = -1;
 
 function drawFrame() {
@@ -889,6 +844,7 @@ function drawFrame() {
 requestAnimationFrame(drawFrame);
 
 window.addEventListener("resize", () => {
+    // Standard viewport dimensions for high FPS
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     lastRenderedFrame = -1; 
