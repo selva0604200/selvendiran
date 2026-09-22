@@ -226,7 +226,7 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
 </footer>
 
 <!-- IMPORT LENIS & GSAP -->
-<script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
@@ -252,10 +252,10 @@ const progressBar = document.getElementById("progress-bar");
 const navbar = document.getElementById("navbar");
 
 // --- CONFIGURATION ---
-// IMPORTANT: Update this number to match the exact number of images in your frames folder!
+// IMPORTANT: Make sure this number matches how many images you actually uploaded to GitHub!
 const frameCount = 150; 
 
-// Formats the image name exactly how EZGIF generated them (e.g. ezgif-frame-001.jpg)
+// Formats the image name exactly how EZGIF generated them (e.g. frames/ezgif-frame-001.jpg)
 const currentFrame = index => (
     `frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.jpg`
 );
@@ -273,11 +273,16 @@ for (let i = 0; i < frameCount; i++) {
 // 4. Draw to Canvas (Object-fit: cover equivalent)
 function render() {
     const img = images[Math.round(sequence.frame)];
+    
+    // Safety check: If image isn't fully downloaded yet, don't draw it.
     if (!img || !img.complete) return;
+    
+    // Safety check 2: Ensure the image actually has width (prevents broken link crash)
+    if (img.naturalWidth === 0) return;
 
-    // Calculate Cover Size
+    // Calculate Cover Size so it fills the screen perfectly
     const canvasRatio = canvas.width / canvas.height;
-    const imgRatio = img.width / img.height;
+    const imgRatio = img.naturalWidth / img.naturalHeight;
     let drawWidth = canvas.width;
     let drawHeight = canvas.height;
     let offsetX = 0;
@@ -295,13 +300,15 @@ function render() {
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
 }
 
-// Draw the first frame as soon as it loads
+// FAILSAFE: Force the first frame to draw immediately when it finishes downloading
 images[0].onload = render;
+if (images[0].complete) render();
 
 // Handle window resizing
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
     render();
 }
 window.addEventListener("resize", resizeCanvas);
