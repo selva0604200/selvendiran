@@ -14,7 +14,7 @@
 /* =========================
    RESET & SMOOTH SCROLL
 ========================= */
-* { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Hide default cursor */ }
+* { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
 html { background: #02040a; scroll-behavior: auto !important; }
 html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
@@ -31,6 +31,20 @@ h1, h2, h3, .logo, .eyebrow, .button, .project-index {
 }
 
 /* =========================
+   CINEMATIC PRELOADER
+========================= */
+#preloader {
+    position: fixed; inset: 0; z-index: 99999; background: #02040a;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.preloader-text { 
+    font-family: 'Space Grotesk', sans-serif; font-size: 11px; 
+    letter-spacing: 0.3em; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 25px; 
+}
+.preloader-bar { width: 250px; height: 1px; background: rgba(255,255,255,0.1); position: relative; }
+.preloader-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: white; transition: width 0.1s; box-shadow: 0 0 10px white; }
+
+/* =========================
    CUSTOM DYNAMIC CURSOR
 ========================= */
 #cursor-dot {
@@ -43,7 +57,6 @@ h1, h2, h3, .logo, .eyebrow, .button, .project-index {
     border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; z-index: 9998; pointer-events: none;
     transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, border-color 0.3s;
 }
-/* When hovering over links */
 .hovering #cursor-dot { width: 0px; height: 0px; }
 .hovering #cursor-ring { width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-color: white; backdrop-filter: blur(2px); }
 
@@ -60,15 +73,10 @@ h1, h2, h3, .logo, .eyebrow, .button, .project-index {
 }
 
 /* =========================
-   LAYOUT & SCROLL PROGRESS
+   LAYOUT & NAVIGATION
 ========================= */
-.nav, main, footer, .scroll-progress { position: relative; z-index: 2; }
-.scroll-progress { position: fixed; top: 0; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.05); z-index: 100; }
-#progress-bar { width: 0%; height: 100%; background: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+.nav, main, footer { position: relative; z-index: 2; }
 
-/* =========================
-   NAVIGATION
-========================= */
 .nav { position: fixed; top: 0; left: 0; width: 100%; padding: 35px 6vw; display: flex; justify-content: space-between; align-items: center; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); mix-blend-mode: difference; }
 .nav.scrolled { padding-top: 20px; padding-bottom: 20px; mix-blend-mode: normal; background: rgba(2,4,10,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
 .logo { font-size: 16px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; color: white; }
@@ -122,7 +130,7 @@ h1, h2, h3, .logo, .eyebrow, .button, .project-index {
 .about-copy p { max-width: 600px; font-size: 18px; line-height: 1.8; color: rgba(255,255,255,0.7); margin-bottom: 20px; font-weight: 300; }
 
 /* =========================
-   SKILLS & PROJECTS (GLASSMORPHISM)
+   SKILLS & PROJECTS
 ========================= */
 .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; margin-top: 80px; }
 .project-card { 
@@ -152,13 +160,12 @@ h1, h2, h3, .logo, .eyebrow, .button, .project-index {
 ========================= */
 footer { display: flex; justify-content: space-between; padding: 40px 8vw; border-top: 1px solid rgba(255,255,255,0.05); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
 
-/* GSAP Reveal Classes */
 .reveal-text { overflow: hidden; }
 .reveal-text span { display: inline-block; transform: translateY(100%); opacity: 0; }
 .reveal-fade { opacity: 0; transform: translateY(30px); }
 
 @media (max-width: 800px) {
-    * { cursor: auto; } /* Disable custom cursor on mobile */
+    * { cursor: auto; } 
     #cursor-dot, #cursor-ring { display: none; }
     .nav { padding: 25px 6vw; } .nav-links { display: none; } 
     .about-grid { grid-template-columns: 1fr; gap: 20px; }
@@ -170,17 +177,19 @@ footer { display: flex; justify-content: space-between; padding: 40px 8vw; borde
 
 <body>
 
+<!-- CINEMATIC PRELOADER -->
+<div id="preloader">
+    <div class="preloader-text">Loading Experience</div>
+    <div class="preloader-bar"><div class="preloader-fill" id="preloader-fill"></div></div>
+</div>
+
 <!-- CUSTOM CURSOR -->
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
 
-<!-- DIAGNOSTIC ERROR BOX (From previous step) -->
-<div id="error-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff3333; color: white; padding: 30px; border-radius: 10px; z-index: 9999;"></div>
-
 <!-- MAGIC CANVAS BACKGROUND -->
 <canvas id="video-canvas"></canvas>
 <div class="video-overlay"></div>
-<div class="scroll-progress"><div id="progress-bar"></div></div>
 
 <header class="nav" id="navbar">
     <a href="#home" class="logo hover-target">Selvendiran</a>
@@ -292,7 +301,6 @@ window.addEventListener('mousemove', (e) => {
     cursorDot.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
 });
 
-// Smoothly trail the ring behind the dot
 function renderCursor() {
     ringX += (mouseX - ringX) * 0.2;
     ringY += (mouseY - ringY) * 0.2;
@@ -301,7 +309,6 @@ function renderCursor() {
 }
 renderCursor();
 
-// Expand cursor on hover
 document.querySelectorAll('.hover-target').forEach(link => {
     link.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
     link.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
@@ -329,7 +336,6 @@ document.querySelectorAll('.magnetic').forEach(btn => {
 ========================================================= */
 gsap.registerPlugin(ScrollTrigger);
 
-// Animate main headings word-by-word sliding up
 document.querySelectorAll('.reveal-text').forEach(text => {
     gsap.to(text.querySelectorAll('span'), {
         scrollTrigger: { trigger: text, start: "top 85%" },
@@ -337,7 +343,6 @@ document.querySelectorAll('.reveal-text').forEach(text => {
     });
 });
 
-// Fade and slide up standard elements
 document.querySelectorAll('.reveal-fade').forEach(el => {
     gsap.to(el, {
         scrollTrigger: { trigger: el, start: "top 85%" },
@@ -346,32 +351,69 @@ document.querySelectorAll('.reveal-fade').forEach(el => {
 });
 
 /* =========================================================
-   4. FRAME-BY-FRAME CANVAS SEQUENCE (YOUR PERFECT SCROLL)
+   4. SCROLL ENGINE & PRELOADER
 ========================================================= */
 const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
 lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add((time) => { lenis.raf(time * 1000); });
 gsap.ticker.lagSmoothing(0, 0);
 
+// PAUSE SCROLLING UNTIL LOADED
+lenis.stop();
+document.body.style.overflow = "hidden";
+
 const canvas = document.getElementById("video-canvas");
 const ctx = canvas.getContext("2d");
-const progressBar = document.getElementById("progress-bar");
 const navbar = document.getElementById("navbar");
 
 // --- CONFIGURATION ---
-const frameCount = 150; // Ensure this matches your GitHub files!
+const frameCount = 150; 
 const currentFrame = index => (`frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.jpg`);
 const images = [];
 const sequence = { frame: 0 }; 
 
-// Error checker for the images
-const errorBox = document.getElementById("error-box");
-const testImg = new Image();
-testImg.src = currentFrame(0);
-testImg.onerror = () => { errorBox.style.display = "block"; errorBox.innerHTML = `<h3>⚠️ IMAGE NOT FOUND</h3><p>Could not find <b>${testImg.src}</b> on GitHub.</p>`; };
+let loadedImagesCount = 0;
+const preloaderFill = document.getElementById("preloader-fill");
 
 for (let i = 0; i < frameCount; i++) {
     const img = new Image();
+    
+    img.onload = () => {
+        loadedImagesCount++;
+        preloaderFill.style.width = `${(loadedImagesCount / frameCount) * 100}%`;
+        
+        // When ALL images are perfectly loaded into RAM
+        if (loadedImagesCount === frameCount) {
+            
+            // Draw first frame instantly
+            renderCanvas(); 
+            
+            // Fade out the preloader
+            gsap.to("#preloader", {
+                opacity: 0,
+                duration: 1,
+                delay: 0.2, // Tiny pause for dramatic effect
+                ease: "power2.inOut",
+                onComplete: () => {
+                    document.getElementById("preloader").style.display = "none";
+                    
+                    // UNLOCK SCROLLING
+                    document.body.style.overflow = "";
+                    lenis.start();
+                    
+                    // Trigger Scroll animations properly
+                    ScrollTrigger.refresh();
+                }
+            });
+        }
+    };
+    
+    // Fallback if an image is missing so the loader doesn't get stuck forever
+    img.onerror = () => {
+        loadedImagesCount++;
+        if (loadedImagesCount === frameCount) gsap.to("#preloader", { opacity: 0, duration: 0.5, onComplete: () => { document.getElementById("preloader").style.display = "none"; lenis.start(); }});
+    };
+
     img.src = currentFrame(i);
     images.push(img);
 }
@@ -395,9 +437,6 @@ function renderCanvas() {
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
 }
 
-images[0].onload = renderCanvas;
-if (images[0].complete) renderCanvas();
-
 window.addEventListener("resize", () => {
     canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
     canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
@@ -405,11 +444,11 @@ window.addEventListener("resize", () => {
 });
 window.dispatchEvent(new Event('resize')); 
 
+// Scroll logic for the Canvas Background
 gsap.to(sequence, {
     frame: frameCount - 1, snap: "frame", ease: "none",
     scrollTrigger: {
-        trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.5,
-        onUpdate: (self) => progressBar.style.width = `${self.progress * 100}%`
+        trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.5
     },
     onUpdate: renderCanvas
 });
