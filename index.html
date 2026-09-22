@@ -203,14 +203,20 @@
         @keyframes pulseOpacity { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; color: #fff; } }
 
         /* =========================
-           CLEAN SECTIONS & GLASS CARDS
+           CLEAN SECTIONS & TIGHTENED BOTTOM SPACING
         ========================= */
-        .content-wrapper { background: transparent; position: relative; z-index: 10; padding-top: 2vh; padding-bottom: 6rem; min-height: 100vh; }
+        .content-wrapper { 
+            background: transparent; 
+            position: relative; 
+            z-index: 10; 
+            padding-top: 2vh; 
+            padding-bottom: 1rem; /* Tightened to remove huge bottom gap */
+        }
 
         section { 
             padding: 1.5rem 0; 
             max-width: 1100px; 
-            margin: 0 auto 3.5rem; 
+            margin: 0 auto 2.5rem; 
             position: relative;
             background: transparent !important;
             border: none !important;
@@ -218,6 +224,10 @@
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
             scroll-margin-top: 5rem;
+        }
+
+        section#contact {
+            margin-bottom: 1.5rem; /* Reduced margin specifically for contact section */
         }
 
         .section-header { 
@@ -255,6 +265,10 @@
             border-color: rgba(255, 255, 255, 0.45);
             transform: translateY(-3px);
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.85);
+        }
+
+        .glass-panel:last-child {
+            margin-bottom: 0;
         }
 
         /* Specific Glass Layouts */
@@ -355,7 +369,16 @@
         }
         .contact-links .contact-link svg { width: 1.4rem; height: 1.4rem; display: block; fill: currentColor; }
         
-        footer { border-top: 1px solid rgba(255,255,255,.15); text-align: center; padding: 4rem 1.25rem 3rem; color: #ffffff; font-size: 0.82rem; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.9); }
+        /* TIGHTENED FOOTER PADDING */
+        footer { 
+            border-top: 1px solid rgba(255,255,255,.15); 
+            text-align: center; 
+            padding: 1.5rem 1.25rem 2rem; /* Reduced top padding */
+            color: #ffffff; 
+            font-size: 0.82rem; 
+            font-weight: 500; 
+            text-shadow: 0 1px 4px rgba(0,0,0,0.9); 
+        }
 
         @media (max-width: 900px) {
             .mega-menu { grid-template-columns: 1fr 1fr; gap: 2rem; }
