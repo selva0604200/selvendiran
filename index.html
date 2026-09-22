@@ -54,9 +54,16 @@
            BACKGROUND CANVAS & OVERLAY
         ========================= */
         #video-canvas {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
-            z-index: 0; pointer-events: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            height: 100dvh;
+            z-index: 0; 
+            pointer-events: none; 
             transform: translateZ(0);
+            will-change: transform;
             backface-visibility: hidden;
             opacity: 1;
         }
@@ -71,12 +78,18 @@
         }
 
         /* =========================
-           NAVIGATION & MEGA MENU
+           NAVIGATION & MEGA MENU (FIXED OVERLAP)
         ========================= */
         nav {
-            position: fixed; top: 0; width: 100%; height: 52px;
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            height: 52px;
             padding: 0 clamp(1rem, 4vw, 5rem);
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            gap: 1.5rem; /* Prevents center links and right button from ever touching */
             background: rgba(10, 14, 22, 0.6) !important; 
             border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
             z-index: 100;
@@ -85,12 +98,19 @@
             box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1);
         }
 
-        .nav-left { display: flex; align-items: center; gap: 2rem; width: 100%; justify-content: space-between; }
+        .nav-left { 
+            display: flex; 
+            align-items: center; 
+            gap: clamp(1.2rem, 2.5vw, 2.5rem); 
+            min-width: 0; 
+        }
+
         .logo { 
             font-weight: 600; font-size: 0.95rem; color: #ffffff; text-decoration: none; 
             letter-spacing: -0.02em; transition: opacity 0.25s ease;
             text-shadow: 0 2px 4px rgba(0,0,0,0.6);
             white-space: nowrap;
+            flex-shrink: 0;
         }
         .logo:hover { opacity: 0.7; }
         
@@ -103,7 +123,12 @@
         }
         .nav-links a:hover, .nav-links a:focus { color: var(--accent); outline: none; }
 
-        .nav-right { display: flex; align-items: center; }
+        .nav-right { 
+            display: flex; 
+            align-items: center; 
+            flex-shrink: 0; /* Prevents button compression */
+        }
+        
         .nav-right .btn-primary {
             position:relative;
             isolation:isolate;
@@ -233,7 +258,6 @@
             text-shadow: 0 2px 8px rgba(0,0,0,0.9); 
         }
 
-        /* Generic Liquid Glass Panel */
         .glass-panel {
             position: relative; 
             z-index: 2; 
@@ -249,7 +273,6 @@
             transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
         }
 
-        /* Experience Layout */
         .experience-item { 
             display: grid; 
             grid-template-columns: 1fr 2.2fr; 
@@ -283,7 +306,6 @@
         .stack-group:last-child { margin-bottom: 0; }
         .stack-group-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.75); margin-bottom: 0.6rem; font-weight: 600; }
 
-        /* Liquid Glass Cert Cards Grid */
         .cert-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
         .cert-card { 
             position: relative;
@@ -304,7 +326,6 @@
         .cert-card p { color: #f0f0f5; font-size: 0.85rem; line-height: 1.4; margin-bottom: 0.8rem; }
         .cert-link { color: var(--accent); font-size: 0.82rem; font-weight: 500; text-decoration: none; }
 
-        /* Social Contact Buttons */
         .contact-card-content { display: flex; flex-direction: column; gap: 1.2rem; }
         .contact-links { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.3rem; }
         .contact-links .contact-link { 
@@ -362,11 +383,9 @@
             section { padding: 0.5rem 0.8rem; margin-bottom: 1.8rem; }
             .glass-panel { padding: 1.2rem 1.2rem; border-radius: 16px; }
             
-            /* Responsive Single-Column Grid */
             .experience-item { grid-template-columns: 1fr; gap: 1rem; }
             .cert-grid { grid-template-columns: 1fr; }
             
-            /* Mobile GPU Performance Boost */
             .glass-panel, .cert-card, .contact-link {
                 backdrop-filter: blur(4px);
                 -webkit-backdrop-filter: blur(4px);
@@ -786,7 +805,7 @@
                         <p>Whether you have a massive data lake problem that needs architecture, complex Spark pipelines that require tuning, or just want to discuss modern data tech, my inbox is open.</p>
                         <div class="contact-links">
                             <a aria-label="Gmail" class="contact-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=abishake06042002@gmail.com" rel="noopener noreferrer" target="_blank">
-                                <svg aria-hidden="true" class="icon-brand icon-gmail" viewBox="0 0 24 24"><path d="M3.5 18.5V5.8L12 12.2l8.5-6.4v12.7" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"></path><path d="M3.5 5.8A2.3 2.3 0 0 1 5.8 3.5h12.4a2.3 2.3 0 0 1 2.3 2.3" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="1.9"></path><path d="M3.5 18.5V5.8L12 12.2" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"></path><path d="M12 12.2 20.5 5.8v12.7" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"></path></svg>
+                                <svg aria-hidden="true" class="icon-brand icon-gmail" viewBox="0 0 24 24"><path d="M3.5 18.5V5.8L12 12.2l8.5-6.4v12.7" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"></path><path d="M3.5 5.8A2.3 2.3 0 0 1 5.8 3.5h12.4a2.3 2.3 0 0 1 2.3 2.3" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"></path><path d="M3.5 18.5V5.8L12 12.2" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"></path><path d="M12 12.2 20.5 5.8v12.7" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"></path></svg>
                                 <span>Email Me</span>
                             </a>
                             <a aria-label="LinkedIn" class="contact-link" href="https://www.linkedin.com/in/selvendiran-s-6a91351a8/" rel="noopener noreferrer" target="_blank">
@@ -823,111 +842,151 @@
     }
   });
   items.forEach(item => {
-    const trigger=item.querySelector(':scope > a');
-    const menu=item.querySelector(':scope > .mega-menu');
-    if(!trigger||!menu)return;
+    const trigger = item.querySelector(':scope > a');
+    const menu = item.querySelector(':scope > .mega-menu');
+    if(!trigger || !menu) return;
     trigger.setAttribute('aria-haspopup','true');
     trigger.setAttribute('aria-expanded','false');
-    trigger.addEventListener('click',e=>{
+    trigger.addEventListener('click', e => {
       if(window.matchMedia('(max-width: 767px)').matches){
         e.preventDefault();
-        const open=item.classList.contains('menu-open');
+        const open = item.classList.contains('menu-open');
         closeAll();
-        if(!open){item.classList.add('menu-open');trigger.setAttribute('aria-expanded','true');}
+        if(!open){ item.classList.add('menu-open'); trigger.setAttribute('aria-expanded','true'); }
       }
     });
-    menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>closeAll()));
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeAll()));
   });
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAll();document.activeElement?.blur();}});
-  document.addEventListener('click',e=>{if(!e.target.closest('.nav-links li.has-mega-menu'))closeAll();});
+  document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeAll(); document.activeElement?.blur(); } });
+  document.addEventListener('click', e => { if(!e.target.closest('.nav-links li.has-mega-menu')) closeAll(); });
 })();
 </script>
 
-<!-- MOBILE OPTIMIZED CANVAS ENGINE -->
+<!-- ULTRA-SMOOTH APPLE-GRADE CANVAS ENGINE -->
 <script>
-const isMobile = window.innerWidth <= 768;
+gsap.registerPlugin(ScrollTrigger);
 
-/* 1. Lenis Smooth Scroll Engine */
-const lenis = new Lenis({ 
-    duration: isMobile ? 0.6 : 0.8, 
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+const isMobile = window.innerWidth <= 768;
+const frameCount = 157;
+const currentFrame = index => `frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.jpg`;
+
+// 1. Lenis Smooth Scroll Configured for Momentum
+const lenis = new Lenis({
+    duration: isMobile ? 0.8 : 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smoothWheel: true,
     touchMultiplier: 1.5
 });
 
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
 
-/* 2. Setup Canvas Context */
+// 2. Setup Canvas Context with Retina DPR Scaling
 const canvas = document.getElementById("video-canvas");
 const ctx = canvas.getContext("2d", { alpha: false, desynchronized: true });
 
-const frameCount = 150; 
-const currentFrame = index => (`frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.jpg`);
+let dpr = Math.min(window.devicePixelRatio || 1, 2);
+const bitmaps = new Array(frameCount);
 
-const images = [];
-const sequence = { frame: 0 }; 
-
-/* 3. Preload Images in Background */
-for (let i = 0; i < frameCount; i++) {
-    const img = new Image();
-    img.src = currentFrame(i);
-    if (img.decode) {
-        img.decode().catch(() => {});
-    }
-    images.push(img);
-}
-
-/* 4. Decoupled Render Loop */
+// Lerp State Variables
+let targetFrame = 0;
+let currentFrameIdx = 0;
 let lastRenderedFrame = -1;
 
-function drawFrame() {
-    const frameIndex = Math.min(frameCount - 1, Math.max(0, Math.round(sequence.frame)));
-    
-    if (frameIndex !== lastRenderedFrame) {
-        const img = images[frameIndex];
-        if (img && img.complete && img.naturalWidth > 0) {
-            const canvasRatio = canvas.width / canvas.height;
-            const imgRatio = img.naturalWidth / img.naturalHeight;
-            let drawWidth = canvas.width, drawHeight = canvas.height, offsetX = 0, offsetY = 0;
+// Cached Cover Layout Dimensions
+let layout = { width: 0, height: 0, x: 0, y: 0 };
 
-            if (canvasRatio > imgRatio) {
-                drawHeight = canvas.width / imgRatio;
-                offsetY = (canvas.height - drawHeight) / 2;
-            } else {
-                drawWidth = canvas.height * imgRatio;
-                offsetX = (canvas.width - drawWidth) / 2;
+function updateCanvasBounds() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
+    
+    recalculateLayout();
+    lastRenderedFrame = -1;
+}
+
+function recalculateLayout() {
+    const sample = bitmaps.find(b => b != null);
+    if (!sample) return;
+
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const canvasRatio = canvasWidth / canvasHeight;
+    const imgRatio = sample.width / sample.height;
+
+    let drawWidth = canvasWidth, drawHeight = canvasHeight;
+    let x = 0, y = 0;
+
+    if (canvasRatio > imgRatio) {
+        drawHeight = canvasWidth / imgRatio;
+        y = (canvasHeight - drawHeight) / 2;
+    } else {
+        drawWidth = canvasHeight * imgRatio;
+        x = (canvasWidth - drawWidth) / 2;
+    }
+
+    layout = { width: drawWidth, height: drawHeight, x, y };
+}
+
+window.addEventListener("resize", updateCanvasBounds);
+
+// 3. High-Performance Preloader (Converts JPEGs to ImageBitmaps in VRAM)
+async function preloadFrames() {
+    updateCanvasBounds();
+
+    for (let i = 0; i < frameCount; i++) {
+        const img = new Image();
+        img.src = currentFrame(i);
+        
+        img.onload = async () => {
+            try {
+                const bitmap = await createImageBitmap(img);
+                bitmaps[i] = bitmap;
+                if (i === 0) recalculateLayout();
+            } catch (e) {
+                bitmaps[i] = img; // Fallback if ImageBitmap is unavailable
             }
+        };
+    }
+}
+preloadFrames();
+
+// 4. Silky-Smooth Lerp Animation Loop
+function renderLoop() {
+    // 0.08 Lerp factor creates physics momentum feel
+    currentFrameIdx += (targetFrame - currentFrameIdx) * 0.08;
+    const renderIndex = Math.min(frameCount - 1, Math.max(0, Math.round(currentFrameIdx)));
+
+    if (renderIndex !== lastRenderedFrame) {
+        const source = bitmaps[renderIndex];
+        if (source) {
+            if (!layout.width) recalculateLayout();
             
-            ctx.fillStyle = "#000000";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-            lastRenderedFrame = frameIndex;
+            ctx.drawImage(
+                source, 
+                layout.x, 
+                layout.y, 
+                layout.width, 
+                layout.height
+            );
+            lastRenderedFrame = renderIndex;
         }
     }
-    requestAnimationFrame(drawFrame);
+    requestAnimationFrame(renderLoop);
 }
-requestAnimationFrame(drawFrame);
+requestAnimationFrame(renderLoop);
 
-window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    lastRenderedFrame = -1; 
-});
-window.dispatchEvent(new Event('resize')); 
-
-/* 5. Smooth Scroll Interpolation */
-gsap.to(sequence, {
-    frame: frameCount - 1, 
-    ease: "none",
-    scrollTrigger: { 
-        trigger: document.body, 
-        start: "top top", 
-        end: "bottom bottom", 
-        scrub: isMobile ? 0.2 : 0.5 
+// 5. Scroll Driven Progress
+ScrollTrigger.create({
+    trigger: document.body,
+    start: "top top",
+    end: "bottom bottom",
+    scrub: true,
+    onUpdate: (self) => {
+        targetFrame = self.progress * (frameCount - 1);
     }
 });
 </script>
