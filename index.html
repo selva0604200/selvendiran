@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Selvendiran | Portfolio</title>
+
 <style>
 /* =========================
-   RESET & SMOOTH SCROLL SETUP
+   RESET & SMOOTH SCROLL (LENIS)
 ========================= */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { background: #02040a; }
+html { background: #02040a; scroll-behavior: auto !important; }
 html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 .lenis.lenis-stopped { overflow: hidden; }
 
@@ -24,17 +25,19 @@ body { background: transparent; color: white; font-family: Arial, Helvetica, san
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
-    object-fit: cover; /* Perfectly fits the screen */
+    object-fit: cover;
     z-index: 0;
     pointer-events: none;
-    /* Forces the browser to use GPU acceleration */
+    /* Forces GPU Acceleration */
     transform: translateZ(0); 
-    will-change: transform;
+    will-change: transform, opacity;
+    opacity: 0; /* Hidden until loaded to prevent black flashes */
+    transition: opacity 1s ease;
 }
 
 .video-overlay {
     position: fixed; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.15) 45%, rgba(0, 0, 0, 0.55));
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.2) 45%, rgba(0, 0, 0, 0.65));
 }
 
 /* =========================
@@ -99,6 +102,7 @@ body { background: transparent; color: white; font-family: Arial, Helvetica, san
 .skill-item { padding: 30px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
 .skill-name { font-size: 24px; font-weight: 600; }
 .skill-detail { margin-top: 10px; font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.55); }
+
 .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 70px; }
 .project-card { position: relative; min-height: 350px; padding: 34px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); transition: 0.4s ease; }
 .project-card:hover { transform: translateY(-8px); background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.4); }
@@ -106,16 +110,19 @@ body { background: transparent; color: white; font-family: Arial, Helvetica, san
 .project-card h3 { margin-top: 75px; font-size: clamp(28px, 3vw, 48px); line-height: 1; letter-spacing: -0.05em; }
 .project-card p { max-width: 430px; margin-top: 22px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.65); }
 .project-link { position: absolute; right: 34px; bottom: 30px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+
 .experience-list { margin-top: 70px; border-top: 1px solid rgba(255,255,255,0.15); }
 .experience-item { display: grid; grid-template-columns: 180px 1fr; gap: 50px; padding: 35px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
 .experience-date { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
 .experience-role { font-size: clamp(24px, 3vw, 40px); letter-spacing: -0.04em; }
 .experience-company { margin-top: 8px; font-size: 13px; color: rgba(255,255,255,0.55); }
 .experience-description { max-width: 650px; margin-top: 18px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.65); }
+
 .contact-title { font-size: clamp(50px, 9vw, 140px); line-height: 0.9; letter-spacing: -0.08em; }
 .contact-title span { color: rgba(255,255,255,0.45); }
 .contact-text { max-width: 580px; margin-top: 30px; font-size: 17px; line-height: 1.8; color: rgba(255,255,255,0.68); }
 .contact-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 35px; }
+
 footer { display: flex; justify-content: space-between; padding: 28px 8vw; border-top: 1px solid rgba(255,255,255,0.12); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
 
 /* ANIMATION */
@@ -135,12 +142,11 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
 
 <body>
 
-<!-- RAW GPU HARDWARE ACCELERATED VIDEO -->
-<!-- Using raw video instead of canvas lets your computer's GPU take over completely -->
+<!-- THE RAW VIDEO ELEMENT -->
 <video id="background-video" muted playsinline preload="auto"></video>
 <div class="video-overlay"></div>
 
-<!-- SCROLL PROGRESS -->
+<!-- SCROLL PROGRESS BAR -->
 <div class="scroll-progress"><div id="progress-bar"></div></div>
 
 <!-- NAVIGATION -->
@@ -167,6 +173,7 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
             <a href="#contact" class="button">Contact Me</a>
         </div>
     </div>
+    <div class="scroll-hint"><span class="scroll-line"></span>Scroll to explore</div>
 </section>
 
 <!-- ABOUT -->
@@ -259,7 +266,7 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
 
 <script>
 /* =========================================================
-   THE GSAP + LENIS ULTIMATE SCROLL STACK
+   THE ULTIMATE LAG-FREE VIDEO ENGINE
 ========================================================= */
 
 // 1. Initialize Lenis (Buttery Scroll)
@@ -269,42 +276,56 @@ const lenis = new Lenis({
     smoothWheel: true,
 });
 
-// Hook Lenis into GSAP ScrollTrigger
 lenis.on('scroll', ScrollTrigger.update);
-
-gsap.ticker.add((time)=>{
-  lenis.raf(time * 1000);
-});
+gsap.ticker.add((time) => { lenis.raf(time * 1000); });
 gsap.ticker.lagSmoothing(0, 0);
 
-// 2. Video Loading & Scrubbing
+
 const video = document.getElementById("background-video");
 const progressBar = document.getElementById("progress-bar");
 const navbar = document.getElementById("navbar");
 
-// We still load the video into memory (Blob) so it reads instantly without HDD delay
+// 2. Preload Video to Memory (Bypasses network buffering)
 fetch('airport.mp4')
     .then(response => response.blob())
     .then(blob => {
         video.src = URL.createObjectURL(blob);
         video.load();
+    })
+    .catch(err => {
+        console.error("Video load error", err);
+        video.src = 'airport.mp4'; // Fallback
     });
 
+
+// 3. The Magic "Heavy Scrub" Logic
 video.addEventListener("loadedmetadata", () => {
-    // We let GSAP (The most powerful animation library) handle the video timing mathematically
-    gsap.to(video, {
+    
+    // Fade video in gently once loaded
+    video.style.opacity = 1;
+
+    // Use GSAP to animate the video's time
+    let tl = gsap.timeline({
         scrollTrigger: {
             trigger: document.body,
             start: "top top",
             end: "bottom bottom",
-            // 0.3 adds a tiny "follow" smoothing effect between the scroll and the video frame
-            scrub: 0.3, 
+            
+            // THE FIX: Scrub 2.5 seconds.
+            // This acts like a heavy shock absorber. When you scroll UP super fast, 
+            // the video doesn't break—it slowly, beautifully glides backward over 2.5 seconds.
+            scrub: 2.5, 
+            
             onUpdate: (self) => {
-                // Update Progress Bar
+                // Update Progress Bar based on actual scroll, not video lag
                 progressBar.style.width = `${self.progress * 100}%`;
             }
-        },
-        currentTime: video.duration,
+        }
+    });
+
+    // Tell GSAP to animate the video's currentTime property from 0 to max duration
+    tl.to(video, {
+        currentTime: video.duration || 1,
         ease: "none"
     });
 });
