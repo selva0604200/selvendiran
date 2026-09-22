@@ -4,20 +4,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Selvendiran | Portfolio</title>
+
+<!-- Premium Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
 <style>
 /* =========================
-   RESET & SMOOTH SCROLL (LENIS)
+   RESET & SMOOTH SCROLL
 ========================= */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Hide default cursor */ }
 html { background: #02040a; scroll-behavior: auto !important; }
 html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 .lenis.lenis-stopped { overflow: hidden; }
 
-body { background: transparent; color: white; font-family: Arial, Helvetica, sans-serif; }
+body { 
+    background: transparent; color: white; 
+    font-family: 'Inter', sans-serif; 
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .logo, .eyebrow, .button, .project-index {
+    font-family: 'Space Grotesk', sans-serif;
+}
 
 /* =========================
-   CANVAS BACKGROUND (FRAME BY FRAME)
+   CUSTOM DYNAMIC CURSOR
+========================= */
+#cursor-dot {
+    position: fixed; top: 0; left: 0; width: 8px; height: 8px; 
+    background: white; border-radius: 50%; z-index: 9999; pointer-events: none;
+    transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, background 0.3s;
+}
+#cursor-ring {
+    position: fixed; top: 0; left: 0; width: 40px; height: 40px; 
+    border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; z-index: 9998; pointer-events: none;
+    transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, border-color 0.3s;
+}
+/* When hovering over links */
+.hovering #cursor-dot { width: 0px; height: 0px; }
+.hovering #cursor-ring { width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-color: white; backdrop-filter: blur(2px); }
+
+/* =========================
+   CANVAS BACKGROUND
 ========================= */
 #video-canvas {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -25,145 +56,168 @@ body { background: transparent; color: white; font-family: Arial, Helvetica, san
 }
 .video-overlay {
     position: fixed; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.2) 45%, rgba(0, 0, 0, 0.65));
+    background: radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, rgba(2,4,10,0.8) 100%);
 }
 
 /* =========================
-   CONTENT LAYER & PROGRESS
+   LAYOUT & SCROLL PROGRESS
 ========================= */
 .nav, main, footer, .scroll-progress { position: relative; z-index: 2; }
-.scroll-progress { position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: rgba(255,255,255,0.12); z-index: 100; }
-#progress-bar { width: 0%; height: 100%; background: white; box-shadow: 0 0 15px white; }
+.scroll-progress { position: fixed; top: 0; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.05); z-index: 100; }
+#progress-bar { width: 0%; height: 100%; background: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
 /* =========================
    NAVIGATION
 ========================= */
-.nav { position: fixed; top: 0; left: 0; width: 100%; padding: 28px 6vw; display: flex; justify-content: space-between; align-items: center; transition: 0.4s ease; }
-.nav.scrolled { padding-top: 18px; padding-bottom: 18px; background: rgba(0,0,0,0.35); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.12); }
-.logo { font-size: 14px; font-weight: bold; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; color: white; }
-.nav-links { display: flex; gap: 30px; }
-.nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; transition: 0.3s ease; }
+.nav { position: fixed; top: 0; left: 0; width: 100%; padding: 35px 6vw; display: flex; justify-content: space-between; align-items: center; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); mix-blend-mode: difference; }
+.nav.scrolled { padding-top: 20px; padding-bottom: 20px; mix-blend-mode: normal; background: rgba(2,4,10,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+.logo { font-size: 16px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; color: white; }
+.nav-links { display: flex; gap: 40px; }
+.nav-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s ease; font-weight: 500; }
 .nav-links a:hover { color: white; }
 
 /* =========================
-   GENERAL SECTIONS
+   SECTIONS
 ========================= */
-.section { min-height: 100vh; padding: 120px 8vw; display: flex; align-items: center; }
-.section-inner { width: 100%; max-width: 1300px; margin: auto; }
-.eyebrow { margin-bottom: 25px; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
-.section-title { max-width: 900px; font-size: clamp(45px, 7vw, 105px); line-height: 0.95; letter-spacing: -0.06em; }
+.section { min-height: 100vh; padding: 150px 8vw; display: flex; align-items: center; }
+.section-inner { width: 100%; max-width: 1400px; margin: auto; }
+.eyebrow { margin-bottom: 25px; font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 500; }
+.section-title { font-size: clamp(40px, 6vw, 90px); line-height: 1; letter-spacing: -0.04em; font-weight: 700; margin-bottom: 40px; }
 
 /* =========================
    HERO
 ========================= */
 .hero { min-height: 100vh; }
-.hero-content { max-width: 1100px; }
-.hero-kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
-.hero-kicker::before { content: ""; width: 35px; height: 1px; background: white; }
-.hero-title { font-size: clamp(55px, 10vw, 155px); line-height: 0.88; letter-spacing: -0.08em; font-weight: 800; }
-.hero-title span { display: block; }
-.hero-title .muted { color: rgba(255,255,255,0.45); }
-.hero-subtitle { max-width: 620px; margin-top: 35px; font-size: clamp(16px, 1.5vw, 21px); line-height: 1.7; color: rgba(255,255,255,0.7); }
-.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 35px; }
-.button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 25px; border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; color: white; text-decoration: none; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; transition: 0.3s ease; }
-.button:hover { transform: translateY(-3px); border-color: white; }
+.hero-content { max-width: 1200px; }
+.hero-kicker { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+.hero-kicker::before { content: ""; width: 40px; height: 1px; background: rgba(255,255,255,0.4); }
+.hero-title { font-size: clamp(60px, 11vw, 200px); line-height: 0.85; letter-spacing: -0.06em; font-weight: 700; text-transform: uppercase; }
+.hero-title .muted { color: rgba(255,255,255,0.3); font-style: italic; font-weight: 300; }
+.hero-subtitle { max-width: 500px; margin-top: 40px; font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.6); font-weight: 300; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 50px; }
+
+/* Magnetic Buttons */
+.button-wrap { position: relative; display: inline-block; }
+.button { 
+    display: inline-flex; align-items: center; justify-content: center; 
+    height: 54px; padding: 0 35px; border: 1px solid rgba(255,255,255,0.2); border-radius: 999px; 
+    color: white; text-decoration: none; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; 
+    transition: background 0.3s, border 0.3s; font-weight: 500; overflow: hidden; position: relative;
+}
+.button::before {
+    content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 100%;
+    background: white; transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: -1;
+}
+.button:hover::before { top: 0; }
+.button:hover { color: #02040a; border-color: white; }
 .button.primary { background: white; color: #02040a; border-color: white; }
-.scroll-hint { position: absolute; bottom: 35px; left: 8vw; display: flex; align-items: center; gap: 12px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
-.scroll-line { width: 40px; height: 1px; background: white; }
+.button.primary::before { background: rgba(255,255,255,0.8); }
+.button.primary:hover { color: #02040a; }
 
 /* =========================
    ABOUT
 ========================= */
-.about-grid { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 10vw; }
-.about-number { font-size: clamp(100px, 15vw, 220px); line-height: 0.8; color: rgba(255,255,255,0.12); font-weight: 800; letter-spacing: -0.08em; }
-.about-copy h3 { max-width: 700px; margin-top: 20px; font-size: clamp(30px, 4vw, 60px); line-height: 1.08; letter-spacing: -0.05em; }
-.about-copy p { max-width: 680px; margin-top: 25px; font-size: 16px; line-height: 1.9; color: rgba(255,255,255,0.68); }
+.about-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 10vw; align-items: center; }
+.about-number { font-size: clamp(120px, 20vw, 300px); line-height: 0.8; color: rgba(255,255,255,0.05); font-weight: 700; letter-spacing: -0.08em; }
+.about-copy p { max-width: 600px; font-size: 18px; line-height: 1.8; color: rgba(255,255,255,0.7); margin-bottom: 20px; font-weight: 300; }
 
 /* =========================
-   SKILLS & PROJECTS & EXPERIENCES
+   SKILLS & PROJECTS (GLASSMORPHISM)
 ========================= */
-.skills-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 60px; margin-top: 70px; border-top: 1px solid rgba(255,255,255,0.15); }
-.skill-item { padding: 30px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
-.skill-name { font-size: 24px; font-weight: 600; }
-.skill-detail { margin-top: 10px; font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.55); }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; margin-top: 80px; }
+.project-card { 
+    position: relative; height: 400px; padding: 40px; overflow: hidden; border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); 
+    backdrop-filter: blur(20px); transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.project-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at top right, rgba(255,255,255,0.1), transparent 50%);
+    opacity: 0; transition: 0.5s;
+}
+.project-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+.project-card:hover::before { opacity: 1; }
+.project-index { font-size: 12px; letter-spacing: 0.2em; color: rgba(255,255,255,0.4); }
+.project-card h3 { margin-top: 80px; font-size: clamp(32px, 3vw, 50px); line-height: 1; letter-spacing: -0.04em; }
+.project-card p { max-width: 400px; margin-top: 20px; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.6); font-weight: 300; }
+.project-link { position: absolute; right: 40px; bottom: 40px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: white; font-weight: 500; }
 
-.projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 70px; }
-.project-card { position: relative; min-height: 350px; padding: 34px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); transition: 0.4s ease; }
-.project-card:hover { transform: translateY(-8px); background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.4); }
-.project-index { font-size: 11px; letter-spacing: 0.2em; color: rgba(255,255,255,0.5); }
-.project-card h3 { margin-top: 75px; font-size: clamp(28px, 3vw, 48px); line-height: 1; letter-spacing: -0.05em; }
-.project-card p { max-width: 430px; margin-top: 22px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.65); }
-.project-link { position: absolute; right: 34px; bottom: 30px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+.skills-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px 60px; margin-top: 60px; }
+.skill-item { padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.skill-name { font-size: 28px; font-weight: 500; letter-spacing: -0.02em; }
+.skill-detail { margin-top: 15px; font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.5); font-weight: 300; }
 
-.experience-list { margin-top: 70px; border-top: 1px solid rgba(255,255,255,0.15); }
-.experience-item { display: grid; grid-template-columns: 180px 1fr; gap: 50px; padding: 35px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
-.experience-date { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
-.experience-role { font-size: clamp(24px, 3vw, 40px); letter-spacing: -0.04em; }
-.experience-company { margin-top: 8px; font-size: 13px; color: rgba(255,255,255,0.55); }
-.experience-description { max-width: 650px; margin-top: 18px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.65); }
+/* =========================
+   FOOTER & ANIMATIONS
+========================= */
+footer { display: flex; justify-content: space-between; padding: 40px 8vw; border-top: 1px solid rgba(255,255,255,0.05); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
 
-.contact-title { font-size: clamp(50px, 9vw, 140px); line-height: 0.9; letter-spacing: -0.08em; }
-.contact-title span { color: rgba(255,255,255,0.45); }
-.contact-text { max-width: 580px; margin-top: 30px; font-size: 17px; line-height: 1.8; color: rgba(255,255,255,0.68); }
-.contact-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 35px; }
-
-footer { display: flex; justify-content: space-between; padding: 28px 8vw; border-top: 1px solid rgba(255,255,255,0.12); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
-
-/* ANIMATION */
-.reveal { opacity: 0; transform: translateY(35px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+/* GSAP Reveal Classes */
+.reveal-text { overflow: hidden; }
+.reveal-text span { display: inline-block; transform: translateY(100%); opacity: 0; }
+.reveal-fade { opacity: 0; transform: translateY(30px); }
 
 @media (max-width: 800px) {
-    .nav { padding: 22px 6vw; } .nav-links { display: none; } .section { padding: 100px 7vw; }
-    .hero-title { font-size: clamp(50px, 15vw, 90px); } .about-grid { grid-template-columns: 1fr; gap: 35px; }
-    .about-number { font-size: 100px; } .skills-list, .projects-grid { grid-template-columns: 1fr; margin-top: 45px; }
-    .project-card { min-height: 300px; } .experience-item { grid-template-columns: 1fr; gap: 15px; }
-    footer { flex-direction: column; gap: 12px; padding: 25px 7vw; }
+    * { cursor: auto; } /* Disable custom cursor on mobile */
+    #cursor-dot, #cursor-ring { display: none; }
+    .nav { padding: 25px 6vw; } .nav-links { display: none; } 
+    .about-grid { grid-template-columns: 1fr; gap: 20px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card { height: auto; min-height: 300px; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- THE MAGIC CANVAS (Replaces the Video) -->
+<!-- CUSTOM CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- DIAGNOSTIC ERROR BOX (From previous step) -->
+<div id="error-box" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff3333; color: white; padding: 30px; border-radius: 10px; z-index: 9999;"></div>
+
+<!-- MAGIC CANVAS BACKGROUND -->
 <canvas id="video-canvas"></canvas>
 <div class="video-overlay"></div>
-
 <div class="scroll-progress"><div id="progress-bar"></div></div>
 
 <header class="nav" id="navbar">
-    <a href="#home" class="logo">Selvendiran</a>
+    <a href="#home" class="logo hover-target">Selvendiran</a>
     <nav class="nav-links">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects</a>
-        <a href="#experience">Experience</a>
-        <a href="#contact">Contact</a>
+        <a href="#about" class="hover-target">About</a>
+        <a href="#skills" class="hover-target">Skills</a>
+        <a href="#projects" class="hover-target">Projects</a>
+        <a href="#contact" class="hover-target">Contact</a>
     </nav>
 </header>
 
 <main>
 <section class="section hero" id="home">
     <div class="section-inner hero-content">
-        <div class="hero-kicker reveal">Data Engineer · Analyst · Builder</div>
-        <h1 class="hero-title reveal"><span>Building</span><span class="muted">meaning from</span><span>data.</span></h1>
-        <p class="hero-subtitle reveal">I design reliable data systems, analytical solutions, and digital experiences that turn complex information into something useful.</p>
-        <div class="hero-actions reveal">
-            <a href="#projects" class="button primary">View Projects</a>
-            <a href="#contact" class="button">Contact Me</a>
+        <div class="hero-kicker reveal-fade">Data Engineer · Analyst · Builder</div>
+        <h1 class="hero-title reveal-text">
+            <span>Building</span><br>
+            <span class="muted">meaning from</span><br>
+            <span>data.</span>
+        </h1>
+        <p class="hero-subtitle reveal-fade">I design reliable data systems, analytical solutions, and dynamic digital experiences that turn complex information into actionable clarity.</p>
+        <div class="hero-actions reveal-fade">
+            <div class="button-wrap magnetic"><a href="#projects" class="button primary hover-target">View Projects</a></div>
+            <div class="button-wrap magnetic"><a href="#contact" class="button hover-target">Contact Me</a></div>
         </div>
     </div>
-    <div class="scroll-hint"><span class="scroll-line"></span>Scroll to explore</div>
 </section>
 
 <section class="section" id="about">
     <div class="section-inner">
         <div class="about-grid">
-            <div class="about-number reveal">01</div>
+            <div class="about-number reveal-fade">01</div>
             <div class="about-copy">
-                <div class="eyebrow reveal">About me</div>
-                <h2 class="section-title reveal">Curiosity drives the work.</h2>
-                <p class="reveal">I am Selvendiran, an IT professional focused on data engineering, analytics, cloud technologies, and practical problem solving.</p>
+                <div class="eyebrow reveal-fade">About me</div>
+                <h2 class="section-title reveal-text"><span>Curiosity drives</span><br><span>the work.</span></h2>
+                <p class="reveal-fade">I am Selvendiran, an IT professional focused on data engineering, analytics, cloud technologies, and practical problem solving.</p>
+                <p class="reveal-fade">My goal is to build systems that are simple to understand, efficient to operate, and beautifully designed for the people using them.</p>
             </div>
         </div>
     </div>
@@ -171,50 +225,45 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
 
 <section class="section" id="skills">
     <div class="section-inner">
-        <div class="eyebrow reveal">Capabilities</div>
-        <h2 class="section-title reveal">Tools for turning questions into answers.</h2>
+        <div class="eyebrow reveal-fade">Capabilities</div>
+        <h2 class="section-title reveal-text"><span>Tools for turning</span><br><span>questions into answers.</span></h2>
         <div class="skills-list">
-            <div class="skill-item reveal"><div class="skill-name">SQL</div><div class="skill-detail">Query design, joins, aggregations, optimization, and analytical reporting.</div></div>
-            <div class="skill-item reveal"><div class="skill-name">Python</div><div class="skill-detail">Data processing, automation, scripting, and analytical workflows.</div></div>
-            <div class="skill-item reveal"><div class="skill-name">Data Engineering</div><div class="skill-detail">ETL pipelines, data transformation, orchestration, and scalable architectures.</div></div>
-            <div class="skill-item reveal"><div class="skill-detail">Cloud</div><div class="skill-detail">AWS services, storage, serverless computing, databases.</div></div>
+            <div class="skill-item reveal-fade"><div class="skill-name">SQL</div><div class="skill-detail">Query design, joins, aggregations, optimization, and analytical reporting.</div></div>
+            <div class="skill-item reveal-fade"><div class="skill-name">Python</div><div class="skill-detail">Data processing, automation, scripting, and analytical workflows.</div></div>
+            <div class="skill-item reveal-fade"><div class="skill-name">Data Engineering</div><div class="skill-detail">ETL pipelines, data transformation, orchestration, and scalable architectures.</div></div>
+            <div class="skill-item reveal-fade"><div class="skill-name">Cloud Architecture</div><div class="skill-detail">AWS services, storage, serverless computing, and secure databases.</div></div>
         </div>
     </div>
 </section>
 
 <section class="section" id="projects">
     <div class="section-inner">
-        <div class="eyebrow reveal">Selected work</div>
-        <h2 class="section-title reveal">Projects built with purpose.</h2>
+        <div class="eyebrow reveal-fade">Selected work</div>
+        <h2 class="section-title reveal-text"><span>Projects built</span><br><span>with purpose.</span></h2>
         <div class="projects-grid">
-            <article class="project-card reveal"><div class="project-index">01 / DATA</div><h3>Analytics<br>Workspace</h3><p>A structured analytics environment for exploring data, identifying trends, and supporting better decisions.</p><span class="project-link">Explore →</span></article>
-            <article class="project-card reveal"><div class="project-index">02 / CLOUD</div><h3>Cloud<br>Pipeline</h3><p>A scalable pipeline concept for collecting, transforming, storing, and delivering data.</p><span class="project-link">Explore →</span></article>
-        </div>
-    </div>
-</section>
-
-<section class="section" id="experience">
-    <div class="section-inner">
-        <div class="eyebrow reveal">Experience</div>
-        <h2 class="section-title reveal">Learning by building.</h2>
-        <div class="experience-list">
-            <div class="experience-item reveal">
-                <div class="experience-date">Present</div>
-                <div><div class="experience-role">IT Professional</div><div class="experience-company">Cognizant Technology Solutions</div><p class="experience-description">Working across enterprise technology environments while developing skills in data, cloud platforms, and engineering practices.</p></div>
-            </div>
+            <a href="#" class="project-card reveal-fade hover-target" style="text-decoration:none; color:white;">
+                <div class="project-index">01 / DATA</div>
+                <h3>Analytics<br>Workspace</h3>
+                <p>A structured analytics environment for exploring data and identifying trends.</p>
+                <span class="project-link">Explore ↗</span>
+            </a>
+            <a href="#" class="project-card reveal-fade hover-target" style="text-decoration:none; color:white;">
+                <div class="project-index">02 / CLOUD</div>
+                <h3>Cloud<br>Pipeline</h3>
+                <p>A scalable pipeline concept for collecting, transforming, and delivering data.</p>
+                <span class="project-link">Explore ↗</span>
+            </a>
         </div>
     </div>
 </section>
 
 <section class="section" id="contact">
     <div class="section-inner">
-        <div class="eyebrow reveal">Contact</div>
-        <h2 class="contact-title reveal">Let's build<br><span>something useful.</span></h2>
-        <p class="contact-text reveal">Interested in data, technology, and meaningful digital experiences? Feel free to connect.</p>
-        <div class="contact-links reveal">
-            <a class="button primary" href="mailto:your.email@example.com">Email Me</a>
-            <a class="button" href="https://github.com/selva0604200" target="_blank">GitHub</a>
-            <a class="button" href="https://www.linkedin.com" target="_blank">LinkedIn</a>
+        <div class="eyebrow reveal-fade">Contact</div>
+        <h2 class="section-title reveal-text"><span>Let's build</span><br><span>something useful.</span></h2>
+        <div class="hero-actions reveal-fade">
+            <div class="button-wrap magnetic"><a class="button primary hover-target" href="mailto:your.email@example.com">Email Me</a></div>
+            <div class="button-wrap magnetic"><a class="button hover-target" href="https://github.com/selva0604200" target="_blank">GitHub</a></div>
         </div>
     </div>
 </section>
@@ -225,68 +274,115 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
     <span>Built with curiosity.</span>
 </footer>
 
-<!-- IMPORT LENIS & GSAP -->
+<!-- SCRIPTS -->
 <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
 <script>
 /* =========================================================
-   FRAME-BY-FRAME CANVAS SEQUENCE
+   1. CUSTOM DYNAMIC CURSOR
 ========================================================= */
+const cursorDot = document.getElementById('cursor-dot');
+const cursorRing = document.getElementById('cursor-ring');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-// 1. Initialize Lenis (Buttery Scroll)
-const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
-    smoothWheel: true,
+window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursorDot.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
 });
+
+// Smoothly trail the ring behind the dot
+function renderCursor() {
+    ringX += (mouseX - ringX) * 0.2;
+    ringY += (mouseY - ringY) * 0.2;
+    cursorRing.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%))`;
+    requestAnimationFrame(renderCursor);
+}
+renderCursor();
+
+// Expand cursor on hover
+document.querySelectorAll('.hover-target').forEach(link => {
+    link.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+    link.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+
+/* =========================================================
+   2. MAGNETIC BUTTONS (Physics hover effect)
+========================================================= */
+document.querySelectorAll('.magnetic').forEach(btn => {
+    btn.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const h = rect.width / 2;
+        const v = rect.height / 2;
+        const x = e.clientX - rect.left - h;
+        const y = e.clientY - rect.top - v;
+        gsap.to(this.querySelector('.button'), { x: x * 0.4, y: y * 0.4, duration: 0.3, ease: "power2.out" });
+    });
+    btn.addEventListener('mouseleave', function() {
+        gsap.to(this.querySelector('.button'), { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+    });
+});
+
+/* =========================================================
+   3. ADVANCED GSAP TEXT ANIMATIONS
+========================================================= */
+gsap.registerPlugin(ScrollTrigger);
+
+// Animate main headings word-by-word sliding up
+document.querySelectorAll('.reveal-text').forEach(text => {
+    gsap.to(text.querySelectorAll('span'), {
+        scrollTrigger: { trigger: text, start: "top 85%" },
+        y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power4.out"
+    });
+});
+
+// Fade and slide up standard elements
+document.querySelectorAll('.reveal-fade').forEach(el => {
+    gsap.to(el, {
+        scrollTrigger: { trigger: el, start: "top 85%" },
+        y: 0, opacity: 1, duration: 1, ease: "power3.out"
+    });
+});
+
+/* =========================================================
+   4. FRAME-BY-FRAME CANVAS SEQUENCE (YOUR PERFECT SCROLL)
+========================================================= */
+const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
 lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add((time) => { lenis.raf(time * 1000); });
 gsap.ticker.lagSmoothing(0, 0);
 
-// 2. Setup Canvas
 const canvas = document.getElementById("video-canvas");
 const ctx = canvas.getContext("2d");
 const progressBar = document.getElementById("progress-bar");
 const navbar = document.getElementById("navbar");
 
 // --- CONFIGURATION ---
-// IMPORTANT: Make sure this number matches how many images you actually uploaded to GitHub!
-const frameCount = 150; 
-
-// Formats the image name exactly how EZGIF generated them (e.g. frames/ezgif-frame-001.jpg)
-const currentFrame = index => (
-    `frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.jpg`
-);
-
+const frameCount = 150; // Ensure this matches your GitHub files!
+const currentFrame = index => (`frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.jpg`);
 const images = [];
 const sequence = { frame: 0 }; 
 
-// 3. Preload Images into RAM
+// Error checker for the images
+const errorBox = document.getElementById("error-box");
+const testImg = new Image();
+testImg.src = currentFrame(0);
+testImg.onerror = () => { errorBox.style.display = "block"; errorBox.innerHTML = `<h3>⚠️ IMAGE NOT FOUND</h3><p>Could not find <b>${testImg.src}</b> on GitHub.</p>`; };
+
 for (let i = 0; i < frameCount; i++) {
     const img = new Image();
     img.src = currentFrame(i);
     images.push(img);
 }
 
-// 4. Draw to Canvas (Object-fit: cover equivalent)
-function render() {
+function renderCanvas() {
     const img = images[Math.round(sequence.frame)];
-    
-    // Safety check: If image isn't fully downloaded yet, don't draw it.
-    if (!img || !img.complete) return;
-    
-    // Safety check 2: Ensure the image actually has width (prevents broken link crash)
-    if (img.naturalWidth === 0) return;
+    if (!img || !img.complete || img.naturalWidth === 0) return;
 
-    // Calculate Cover Size so it fills the screen perfectly
     const canvasRatio = canvas.width / canvas.height;
     const imgRatio = img.naturalWidth / img.naturalHeight;
-    let drawWidth = canvas.width;
-    let drawHeight = canvas.height;
-    let offsetX = 0;
-    let offsetY = 0;
+    let drawWidth = canvas.width, drawHeight = canvas.height, offsetX = 0, offsetY = 0;
 
     if (canvasRatio > imgRatio) {
         drawHeight = canvas.width / imgRatio;
@@ -295,58 +391,33 @@ function render() {
         drawWidth = canvas.height * imgRatio;
         offsetX = (canvas.width - drawWidth) / 2;
     }
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
 }
 
-// FAILSAFE: Force the first frame to draw immediately when it finishes downloading
-images[0].onload = render;
-if (images[0].complete) render();
+images[0].onload = renderCanvas;
+if (images[0].complete) renderCanvas();
 
-// Handle window resizing
-function resizeCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
-    render();
-}
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas(); 
+window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
+    canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
+    renderCanvas();
+});
+window.dispatchEvent(new Event('resize')); 
 
-// 5. Link Scroll to Frame Animation
 gsap.to(sequence, {
-    frame: frameCount - 1, 
-    snap: "frame", // Ensures we land on whole numbers (no half-frames)
-    ease: "none",
+    frame: frameCount - 1, snap: "frame", ease: "none",
     scrollTrigger: {
-        trigger: document.body,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 0.5, // 0.5 gives a tiny, beautiful glide smoothing effect
-        onUpdate: (self) => {
-            progressBar.style.width = `${self.progress * 100}%`;
-        }
+        trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.5,
+        onUpdate: (self) => progressBar.style.width = `${self.progress * 100}%`
     },
-    onUpdate: render // Every time GSAP updates the frame number, draw it!
+    onUpdate: renderCanvas
 });
 
-// Navbar Trigger
 window.addEventListener("scroll", () => {
     if (window.scrollY > 40) navbar.classList.add("scrolled");
     else navbar.classList.remove("scrolled");
 });
-
-/* =========================
-   TEXT REVEAL ANIMATIONS
-========================= */
-const revealElements = document.querySelectorAll(".reveal");
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add("visible");
-    });
-}, { threshold: 0.12 });
-revealElements.forEach(el => observer.observe(el));
 </script>
 
 </body>
