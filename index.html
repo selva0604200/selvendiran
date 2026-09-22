@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Selvendiran | Portfolio</title>
-
 <style>
 /* =========================
    RESET & SMOOTH SCROLL (LENIS)
@@ -19,20 +17,15 @@ html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
 body { background: transparent; color: white; font-family: Arial, Helvetica, sans-serif; }
 
 /* =========================
-   HARDWARE-ACCELERATED VIDEO
+   CANVAS BACKGROUND (FRAME BY FRAME)
 ========================= */
-#background-video {
+#video-canvas {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
-    object-fit: cover;
     z-index: 0;
     pointer-events: none;
-    /* Forces GPU Acceleration */
-    transform: translateZ(0); 
-    will-change: transform, opacity;
-    opacity: 0; /* Hidden until loaded to prevent black flashes */
-    transition: opacity 1s ease;
+    transform: translateZ(0); /* Hardware acceleration */
 }
 
 .video-overlay {
@@ -41,13 +34,9 @@ body { background: transparent; color: white; font-family: Arial, Helvetica, san
 }
 
 /* =========================
-   CONTENT LAYER
+   CONTENT LAYER & PROGRESS
 ========================= */
 .nav, main, footer, .scroll-progress { position: relative; z-index: 2; }
-
-/* =========================
-   SCROLL PROGRESS
-========================= */
 .scroll-progress { position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: rgba(255,255,255,0.12); z-index: 100; }
 #progress-bar { width: 0%; height: 100%; background: white; box-shadow: 0 0 15px white; }
 
@@ -129,7 +118,6 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
 .reveal { opacity: 0; transform: translateY(35px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* MOBILE */
 @media (max-width: 800px) {
     .nav { padding: 22px 6vw; } .nav-links { display: none; } .section { padding: 100px 7vw; }
     .hero-title { font-size: clamp(50px, 15vw, 90px); } .about-grid { grid-template-columns: 1fr; gap: 35px; }
@@ -142,14 +130,12 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
 
 <body>
 
-<!-- THE RAW VIDEO ELEMENT -->
-<video id="background-video" muted playsinline preload="auto"></video>
+<!-- THE MAGIC CANVAS (Replaces the Video) -->
+<canvas id="video-canvas"></canvas>
 <div class="video-overlay"></div>
 
-<!-- SCROLL PROGRESS BAR -->
 <div class="scroll-progress"><div id="progress-bar"></div></div>
 
-<!-- NAVIGATION -->
 <header class="nav" id="navbar">
     <a href="#home" class="logo">Selvendiran</a>
     <nav class="nav-links">
@@ -162,7 +148,6 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
 </header>
 
 <main>
-<!-- HERO -->
 <section class="section hero" id="home">
     <div class="section-inner hero-content">
         <div class="hero-kicker reveal">Data Engineer · Analyst · Builder</div>
@@ -176,7 +161,6 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
     <div class="scroll-hint"><span class="scroll-line"></span>Scroll to explore</div>
 </section>
 
-<!-- ABOUT -->
 <section class="section" id="about">
     <div class="section-inner">
         <div class="about-grid">
@@ -185,13 +169,11 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
                 <div class="eyebrow reveal">About me</div>
                 <h2 class="section-title reveal">Curiosity drives the work.</h2>
                 <p class="reveal">I am Selvendiran, an IT professional focused on data engineering, analytics, cloud technologies, and practical problem solving.</p>
-                <p class="reveal">My goal is to build systems that are simple to understand, efficient to operate, and valuable to the people using them.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- SKILLS -->
 <section class="section" id="skills">
     <div class="section-inner">
         <div class="eyebrow reveal">Capabilities</div>
@@ -200,14 +182,11 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
             <div class="skill-item reveal"><div class="skill-name">SQL</div><div class="skill-detail">Query design, joins, aggregations, optimization, and analytical reporting.</div></div>
             <div class="skill-item reveal"><div class="skill-name">Python</div><div class="skill-detail">Data processing, automation, scripting, and analytical workflows.</div></div>
             <div class="skill-item reveal"><div class="skill-name">Data Engineering</div><div class="skill-detail">ETL pipelines, data transformation, orchestration, and scalable architectures.</div></div>
-            <div class="skill-item reveal"><div class="skill-name">Cloud</div><div class="skill-detail">AWS services, storage, serverless computing, databases, and cloud-based solutions.</div></div>
-            <div class="skill-item reveal"><div class="skill-name">Data Analysis</div><div class="skill-detail">Finding patterns, measuring outcomes, and communicating insights clearly.</div></div>
-            <div class="skill-item reveal"><div class="skill-name">Problem Solving</div><div class="skill-detail">Breaking complex requirements into practical, maintainable solutions.</div></div>
+            <div class="skill-item reveal"><div class="skill-detail">Cloud</div><div class="skill-detail">AWS services, storage, serverless computing, databases.</div></div>
         </div>
     </div>
 </section>
 
-<!-- PROJECTS -->
 <section class="section" id="projects">
     <div class="section-inner">
         <div class="eyebrow reveal">Selected work</div>
@@ -215,13 +194,10 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
         <div class="projects-grid">
             <article class="project-card reveal"><div class="project-index">01 / DATA</div><h3>Analytics<br>Workspace</h3><p>A structured analytics environment for exploring data, identifying trends, and supporting better decisions.</p><span class="project-link">Explore →</span></article>
             <article class="project-card reveal"><div class="project-index">02 / CLOUD</div><h3>Cloud<br>Pipeline</h3><p>A scalable pipeline concept for collecting, transforming, storing, and delivering data.</p><span class="project-link">Explore →</span></article>
-            <article class="project-card reveal"><div class="project-index">03 / AUTOMATION</div><h3>Smart<br>Automation</h3><p>Automated workflows designed to reduce repetitive work and improve operational visibility.</p><span class="project-link">Explore →</span></article>
-            <article class="project-card reveal"><div class="project-index">04 / EXPERIMENT</div><h3>Future<br>Ideas</h3><p>Experiments combining artificial intelligence, data, and human-centered digital experiences.</p><span class="project-link">Explore →</span></article>
         </div>
     </div>
 </section>
 
-<!-- EXPERIENCE -->
 <section class="section" id="experience">
     <div class="section-inner">
         <div class="eyebrow reveal">Experience</div>
@@ -231,15 +207,10 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
                 <div class="experience-date">Present</div>
                 <div><div class="experience-role">IT Professional</div><div class="experience-company">Cognizant Technology Solutions</div><p class="experience-description">Working across enterprise technology environments while developing skills in data, cloud platforms, and engineering practices.</p></div>
             </div>
-            <div class="experience-item reveal">
-                <div class="experience-date">Continuous</div>
-                <div><div class="experience-role">Data Engineering Journey</div><div class="experience-company">SQL · Python · AWS · Analytics</div><p class="experience-description">Building practical knowledge through projects, experiments, and continuous learning.</p></div>
-            </div>
         </div>
     </div>
 </section>
 
-<!-- CONTACT -->
 <section class="section" id="contact">
     <div class="section-inner">
         <div class="eyebrow reveal">Contact</div>
@@ -259,14 +230,14 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
     <span>Built with curiosity.</span>
 </footer>
 
-<!-- 1. IMPORT LENIS (Scroll Physics) AND GSAP (Animation Engine) -->
+<!-- IMPORT LENIS & GSAP -->
 <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
 <script>
 /* =========================================================
-   THE ULTIMATE LAG-FREE VIDEO ENGINE
+   FRAME-BY-FRAME CANVAS SEQUENCE
 ========================================================= */
 
 // 1. Initialize Lenis (Buttery Scroll)
@@ -275,62 +246,90 @@ const lenis = new Lenis({
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
     smoothWheel: true,
 });
-
 lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add((time) => { lenis.raf(time * 1000); });
 gsap.ticker.lagSmoothing(0, 0);
 
-
-const video = document.getElementById("background-video");
+// 2. Setup Canvas
+const canvas = document.getElementById("video-canvas");
+const ctx = canvas.getContext("2d");
 const progressBar = document.getElementById("progress-bar");
 const navbar = document.getElementById("navbar");
 
-// 2. Preload Video to Memory (Bypasses network buffering)
-fetch('airport.mp4')
-    .then(response => response.blob())
-    .then(blob => {
-        video.src = URL.createObjectURL(blob);
-        video.load();
-    })
-    .catch(err => {
-        console.error("Video load error", err);
-        video.src = 'airport.mp4'; // Fallback
-    });
+// --- CONFIGURATION ---
+// IMPORTANT: Change this number to match exactly how many image frames you have.
+const frameCount = 150; 
+// Change this function to match your folder and file naming structure.
+// Example: "frames/frame_0001.jpg"
+const currentFrame = index => (
+    `frames/frame_${(index + 1).toString().padStart(4, '0')}.jpg`
+);
 
+const images = [];
+const sequence = { frame: 0 }; // Object for GSAP to animate
 
-// 3. The Magic "Heavy Scrub" Logic
-video.addEventListener("loadedmetadata", () => {
-    
-    // Fade video in gently once loaded
-    video.style.opacity = 1;
+// 3. Preload Images into RAM
+for (let i = 0; i < frameCount; i++) {
+    const img = new Image();
+    img.src = currentFrame(i);
+    images.push(img);
+}
 
-    // Use GSAP to animate the video's time
-    let tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: document.body,
-            start: "top top",
-            end: "bottom bottom",
-            
-            // THE FIX: Scrub 2.5 seconds.
-            // This acts like a heavy shock absorber. When you scroll UP super fast, 
-            // the video doesn't break—it slowly, beautifully glides backward over 2.5 seconds.
-            scrub: 2.5, 
-            
-            onUpdate: (self) => {
-                // Update Progress Bar based on actual scroll, not video lag
-                progressBar.style.width = `${self.progress * 100}%`;
-            }
+// 4. Draw to Canvas (Object-fit: cover equivalent)
+function render() {
+    const img = images[Math.round(sequence.frame)];
+    if (!img || !img.complete) return;
+
+    // Calculate Cover Size
+    const canvasRatio = canvas.width / canvas.height;
+    const imgRatio = img.width / img.height;
+    let drawWidth = canvas.width;
+    let drawHeight = canvas.height;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (canvasRatio > imgRatio) {
+        drawHeight = canvas.width / imgRatio;
+        offsetY = (canvas.height - drawHeight) / 2;
+    } else {
+        drawWidth = canvas.height * imgRatio;
+        offsetX = (canvas.width - drawWidth) / 2;
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+}
+
+// Draw the first frame as soon as it loads
+images[0].onload = render;
+
+// Handle window resizing
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    render();
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas(); // Initial call
+
+// 5. Link Scroll to Frame Animation
+gsap.to(sequence, {
+    frame: frameCount - 1, // Animate from frame 0 to frame 149
+    snap: "frame", // Ensures we land on whole numbers (no half-frames)
+    ease: "none",
+    scrollTrigger: {
+        trigger: document.body,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.5, // 0.5 gives a tiny, beautiful glide smoothing effect
+        onUpdate: (self) => {
+            progressBar.style.width = `${self.progress * 100}%`;
         }
-    });
-
-    // Tell GSAP to animate the video's currentTime property from 0 to max duration
-    tl.to(video, {
-        currentTime: video.duration || 1,
-        ease: "none"
-    });
+    },
+    onUpdate: render // Every time GSAP updates the frame number, draw it!
 });
 
-// Navbar Transparency Trigger
+// Navbar Trigger
 window.addEventListener("scroll", () => {
     if (window.scrollY > 40) navbar.classList.add("scrolled");
     else navbar.classList.remove("scrolled");
