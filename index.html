@@ -30,18 +30,21 @@ body {
 }
 
 /* =========================
-   BACKGROUND VIDEO
+   BACKGROUND CANVAS & VIDEO
 ========================= */
 
-#background-video {
+#video-canvas {
     position: fixed;
     inset: 0;
     width: 100vw;
     height: 100vh;
-    object-fit: cover;
     z-index: 0;
     pointer-events: none;
     background: #02040a;
+}
+
+#background-video {
+    display: none; /* Video is rendered dynamically through canvas */
 }
 
 .video-overlay {
@@ -123,6 +126,8 @@ footer,
     font-weight: bold;
     letter-spacing: 0.25em;
     text-transform: uppercase;
+    text-decoration: none;
+    color: white;
 }
 
 .nav-links {
@@ -589,7 +594,9 @@ footer {
 
 <body>
 
-<!-- BACKGROUND VIDEO -->
+<!-- BACKGROUND CANVAS & HIDDEN VIDEO -->
+
+<canvas id="video-canvas"></canvas>
 
 <video
     id="background-video"
@@ -980,46 +987,81 @@ footer {
 </footer>
 
 <script>
-/* =========================
-   VIDEO SCROLL CONTROLLER
-========================= */
+/* =========================================================
+   DYNAMIC CANVAS & DYNAMIC FRAME-BY-FRAME VIDEO CONTROLLER
+========================================================= */
 
 const video = document.getElementById("background-video");
+const canvas = document.getElementById("video-canvas");
+const ctx = canvas.getContext("2d");
 const progressBar = document.getElementById("progress-bar");
 const navbar = document.getElementById("navbar");
 
 let targetTime = 0;
 let currentTime = 0;
 let videoReady = false;
+let isSeeking = false;
 
+/* Clamp Helper */
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
 
+/* Dynamically resize canvas while maintaining aspect ratio (object-fit: cover logic) */
+function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+
+    drawCanvasFrame();
+}
+
+/* Draw video frame dynamically onto canvas */
+function drawCanvasFrame() {
+    if (!videoReady || !video.videoWidth || !video.videoHeight) return;
+
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const videoWidth = video.videoWidth;
+    const videoHeight = video.videoHeight;
+
+    // Calculate aspect ratio cover calculation dynamically
+    const hRatio = canvasWidth / videoWidth;
+    const vRatio = canvasHeight / videoHeight;
+    const ratio = Math.max(hRatio, vRatio);
+
+    const centerShift_x = (canvasWidth - videoWidth * ratio) / 2;
+    const centerShift_y = (canvasHeight - videoHeight * ratio) / 2;
+
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.drawImage(
+        video,
+        0, 0, videoWidth, videoHeight,
+        centerShift_x, centerShift_y, videoWidth * ratio, videoHeight * ratio
+    );
+}
+
+/* Dynamic scroll calculation */
 function getScrollProgress() {
     const scrollTop = window.scrollY || window.pageYOffset;
-
-    const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
 
     if (maxScroll <= 0) return 0;
-
     return clamp(scrollTop / maxScroll, 0, 1);
 }
 
 function updateScrollTarget() {
     const progress = getScrollProgress();
 
+    // Progress bar UI
     progressBar.style.width = `${progress * 100}%`;
 
-    if (
-        videoReady &&
-        Number.isFinite(video.duration) &&
-        video.duration > 0
-    ) {
+    // Dynamic Video Target Time
+    if (videoReady && Number.isFinite(video.duration) && video.duration > 0) {
         targetTime = progress * video.duration;
     }
 
+    // Dynamic Navbar UI
     if (window.scrollY > 40) {
         navbar.classList.add("scrolled");
     } else {
@@ -1027,56 +1069,60 @@ function updateScrollTarget() {
     }
 }
 
-function smoothSeek() {
-    if (
-        videoReady &&
-        Number.isFinite(video.duration) &&
-        video.duration > 0
-    ) {
-        currentTime += (targetTime - currentTime) * 0.12;
+/* Smooth interpolation (LERP) loop for responsive video updates */
+function renderLoop() {
+    if (videoReady && Number.isFinite(video.duration) && video.duration > 0) {
+        // Higher values = faster response, lower = smoother easing
+        const lerpFactor = 0.2;
+        const diff = targetTime - currentTime;
 
-        if (Math.abs(video.currentTime - currentTime) > 0.01) {
-            try {
+        if (Math.abs(diff) > 0.001) {
+            currentTime += diff * lerpFactor;
+
+            // Prevent video decoder lag by checking seeking state dynamically
+            if (!isSeeking) {
+                isSeeking = true;
                 video.currentTime = currentTime;
-            } catch (error) {
-                console.warn("Video seek error:", error);
             }
         }
     }
 
-    requestAnimationFrame(smoothSeek);
+    requestAnimationFrame(renderLoop);
 }
 
+/* Video Event Listeners */
 video.addEventListener("loadedmetadata", () => {
     videoReady = true;
-
     video.pause();
-    video.currentTime = 0;
-
-    currentTime = 0;
-    targetTime = 0;
-
+    resizeCanvas();
     updateScrollTarget();
-    smoothSeek();
+});
+
+video.addEventListener("seeked", () => {
+    isSeeking = false;
+    drawCanvasFrame(); // Render newly seeked frame immediately to canvas
 });
 
 video.addEventListener("canplay", () => {
     videoReady = true;
+    drawCanvasFrame();
 });
 
 video.addEventListener("error", () => {
     console.error(
-        "airport.mp4 could not be loaded. Make sure it is in the same folder as index.html."
+        "airport.mp4 could not be loaded. Ensure it is placed in the root directory."
     );
 });
 
-window.addEventListener(
-    "scroll",
-    updateScrollTarget,
-    { passive: true }
-);
+/* Event Listeners */
+window.addEventListener("scroll", updateScrollTarget, { passive: true });
+window.addEventListener("resize", () => {
+    resizeCanvas();
+    updateScrollTarget();
+});
 
-window.addEventListener("resize", updateScrollTarget);
+/* Initialize Animation Loop */
+requestAnimationFrame(renderLoop);
 
 /* =========================
    REVEAL ANIMATIONS
@@ -1092,19 +1138,14 @@ const observer = new IntersectionObserver(
             }
         });
     },
-    {
-        threshold: 0.12
-    }
+    { threshold: 0.12 }
 );
 
 revealElements.forEach((element) => {
     observer.observe(element);
 });
 
-/* =========================
-   INITIALIZE
-========================= */
-
+/* Initial trigger */
 updateScrollTarget();
 </script>
 
