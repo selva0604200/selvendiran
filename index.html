@@ -6,11 +6,18 @@
 <title>Selvendiran | Portfolio</title>
 <style>
 /* =========================
-   RESET
+   RESET & LENIS SETUP
 ========================= */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; background: #02040a; }
-body { overflow-x: hidden; background: transparent; color: white; font-family: Arial, Helvetica, sans-serif; }
+/* Remove native smooth scroll, Lenis handles it better */
+html { background: #02040a; }
+html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+body { background: transparent; color: white; font-family: Arial, Helvetica, sans-serif; }
 
 /* =========================
    BACKGROUND CANVAS
@@ -24,7 +31,7 @@ body { overflow-x: hidden; background: transparent; color: white; font-family: A
     pointer-events: none;
     background: #02040a;
 }
-/* Hide actual video, it only feeds the canvas */
+/* Hide actual video */
 #background-video { display: none; }
 
 .video-overlay {
@@ -74,7 +81,7 @@ body { overflow-x: hidden; background: transparent; color: white; font-family: A
 .section-title { max-width: 900px; font-size: clamp(45px, 7vw, 105px); line-height: 0.95; letter-spacing: -0.06em; }
 
 /* =========================
-   HERO
+   HERO & SECTIONS
 ========================= */
 .hero { min-height: 100vh; }
 .hero-content { max-width: 1100px; }
@@ -95,22 +102,16 @@ body { overflow-x: hidden; background: transparent; color: white; font-family: A
 .scroll-hint { position: absolute; bottom: 35px; left: 8vw; display: flex; align-items: center; gap: 12px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
 .scroll-line { width: 40px; height: 1px; background: white; }
 
-/* =========================
-   ABOUT
-========================= */
 .about-grid { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 10vw; }
 .about-number { font-size: clamp(100px, 15vw, 220px); line-height: 0.8; color: rgba(255,255,255,0.12); font-weight: 800; letter-spacing: -0.08em; }
 .about-copy h3 { max-width: 700px; margin-top: 20px; font-size: clamp(30px, 4vw, 60px); line-height: 1.08; letter-spacing: -0.05em; }
 .about-copy p { max-width: 680px; margin-top: 25px; font-size: 16px; line-height: 1.9; color: rgba(255,255,255,0.68); }
 
-/* =========================
-   SKILLS & PROJECTS & EXP
-========================= */
-/* Minified rest of CSS for clarity, it is identical to your original */
 .skills-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 60px; margin-top: 70px; border-top: 1px solid rgba(255,255,255,0.15); }
 .skill-item { padding: 30px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
 .skill-name { font-size: 24px; font-weight: 600; }
 .skill-detail { margin-top: 10px; font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.55); }
+
 .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 70px; }
 .project-card { position: relative; min-height: 350px; padding: 34px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); transition: 0.4s ease; }
 .project-card:hover { transform: translateY(-8px); background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.4); }
@@ -118,20 +119,23 @@ body { overflow-x: hidden; background: transparent; color: white; font-family: A
 .project-card h3 { margin-top: 75px; font-size: clamp(28px, 3vw, 48px); line-height: 1; letter-spacing: -0.05em; }
 .project-card p { max-width: 430px; margin-top: 22px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.65); }
 .project-link { position: absolute; right: 34px; bottom: 30px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+
 .experience-list { margin-top: 70px; border-top: 1px solid rgba(255,255,255,0.15); }
 .experience-item { display: grid; grid-template-columns: 180px 1fr; gap: 50px; padding: 35px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
 .experience-date { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
 .experience-role { font-size: clamp(24px, 3vw, 40px); letter-spacing: -0.04em; }
 .experience-company { margin-top: 8px; font-size: 13px; color: rgba(255,255,255,0.55); }
 .experience-description { max-width: 650px; margin-top: 18px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.65); }
+
 .contact-title { font-size: clamp(50px, 9vw, 140px); line-height: 0.9; letter-spacing: -0.08em; }
 .contact-title span { color: rgba(255,255,255,0.45); }
 .contact-text { max-width: 580px; margin-top: 30px; font-size: 17px; line-height: 1.8; color: rgba(255,255,255,0.68); }
 .contact-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 35px; }
+
 footer { display: flex; justify-content: space-between; padding: 28px 8vw; border-top: 1px solid rgba(255,255,255,0.12); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
 
 /* ANIMATION */
-.reveal { opacity: 0; transform: translateY(35px); transition: opacity 0.9s ease, transform 0.9s ease; }
+.reveal { opacity: 0; transform: translateY(35px); transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* MOBILE */
@@ -148,7 +152,6 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
 
 <!-- BACKGROUND VIDEO -->
 <canvas id="video-canvas"></canvas>
-<!-- Note: We removed the 'src' here. We load it via Javascript BLOB for speed! -->
 <video id="background-video" muted playsinline preload="auto"></video>
 <div class="video-overlay"></div>
 
@@ -261,11 +264,29 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
     <span>Built with curiosity.</span>
 </footer>
 
+<!-- 1. ADD LENIS SMOOTH SCROLL LIBRARY -->
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+
 <script>
 /* =========================================================
-   ULTIMATE BLOB-MEMORY VIDEO SCRUBBER
+   THE ULTIMATE SMOOTH SCROLL & VIDEO SCRUBBER
 ========================================================= */
 
+// --- A. INITIALIZE SMOOTH SCROLL PHYSICS (LENIS) ---
+const lenis = new Lenis({
+    duration: 1.5, // How long the scroll glide lasts (higher = smoother)
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Apple-style easing
+    smoothWheel: true,
+});
+
+function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+
+// --- B. SETUP VIDEO & CANVAS ---
 const video = document.getElementById("background-video");
 const canvas = document.getElementById("video-canvas");
 const ctx = canvas.getContext("2d");
@@ -276,25 +297,20 @@ let targetTime = 0;
 let currentTime = 0;
 let videoReady = false;
 
-// 1. LOAD VIDEO INTO MEMORY (BLOB) FOR INSTANT PLAYBACK
-// This prevents the browser from reading the hard drive while scrolling!
+// Preload the video to RAM (Blob) for instant, lag-free scrubbing
 async function preloadVideo(url) {
     try {
         const response = await fetch(url);
         const blob = await response.blob();
-        const blobURL = URL.createObjectURL(blob);
-        video.src = blobURL;
+        video.src = URL.createObjectURL(blob);
         video.load();
     } catch (error) {
-        console.warn("Could not preload to Blob. Falling back to normal src.", error);
         video.src = url;
     }
 }
-// IMPORTANT: Ensure airport.mp4 is in the same folder
 preloadVideo("airport.mp4");
 
-
-// 2. CANVAS RESIZING (To cover the whole screen)
+// Resize canvas to cover the whole screen perfectly
 function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
     canvas.width = window.innerWidth * dpr;
@@ -302,7 +318,7 @@ function resizeCanvas() {
     drawFrame();
 }
 
-// 3. DRAW TO CANVAS WITH OBJECT-FIT: COVER LOGIC
+// Draw the current video frame onto the canvas
 function drawFrame() {
     if (!videoReady || !video.videoWidth) return;
     
@@ -319,36 +335,40 @@ function drawFrame() {
     ctx.drawImage(video, 0, 0, vw, vh, cx, cy, vw * ratio, vh * ratio);
 }
 
-// 4. CALCULATE SCROLL POSITION
-function updateScroll() {
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = Math.max(0, Math.min(window.scrollY / maxScroll, 1));
+// --- C. LINK LENIS SCROLL PROGRESS TO VIDEO TIME ---
+// Instead of listening to native, jerky scrolling, we listen to Lenis's smooth physics!
+lenis.on('scroll', (e) => {
+    // e.progress is a perfect number between 0.000 and 1.000
+    const progress = Math.max(0, Math.min(e.progress, 1));
     
+    // Update progress bar UI
     progressBar.style.width = `${progress * 100}%`;
 
+    // Calculate where the video SHOULD be based on scroll
     if (videoReady && video.duration) {
         targetTime = progress * video.duration;
     }
 
+    // Navbar transparency logic
     if (window.scrollY > 40) navbar.classList.add("scrolled");
     else navbar.classList.remove("scrolled");
-}
+});
 
-// 5. THE MAGIC LERP LOOP (Ultra-Smooth Gliding)
-function loop() {
+// --- D. THE VIDEO LERP LOOP ---
+// This gently drags the video time to match the smooth scroll time
+function videoLoop() {
     if (videoReady) {
-        // LERP Factor: 0.08 is extremely buttery. 
-        // Higher (e.g. 0.2) = faster snap, Lower (e.g. 0.04) = heavier glide
-        currentTime += (targetTime - currentTime) * 0.08;
+        // LERP factor: 0.1 gives it a beautiful heavy, cinematic glide.
+        currentTime += (targetTime - currentTime) * 0.1;
 
         if (Math.abs(targetTime - currentTime) > 0.001) {
             video.currentTime = currentTime;
         }
     }
-    requestAnimationFrame(loop);
+    requestAnimationFrame(videoLoop);
 }
 
-// 6. SYNC FRAME DECODER (Prevents flickering)
+// Sync video decoder exactly with browser refresh rate
 if ('requestVideoFrameCallback' in video) {
     const updateCanvas = () => {
         drawFrame();
@@ -356,24 +376,20 @@ if ('requestVideoFrameCallback' in video) {
     };
     video.requestVideoFrameCallback(updateCanvas);
 } else {
-    // Fallback for Safari/Firefox if needed
     video.addEventListener('timeupdate', drawFrame);
 }
 
-/* =========================
-   EVENT LISTENERS
-========================= */
+// Event Listeners
 video.addEventListener("loadedmetadata", () => {
     videoReady = true;
     resizeCanvas();
-    updateScroll();
 });
 
-window.addEventListener("scroll", updateScroll, { passive: true });
 window.addEventListener("resize", resizeCanvas);
 
-// Start the animation loop
-requestAnimationFrame(loop);
+// Start the video update loop
+requestAnimationFrame(videoLoop);
+
 
 /* =========================
    TEXT REVEAL ANIMATIONS
@@ -386,6 +402,7 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 
 revealElements.forEach(el => observer.observe(el));
+
 </script>
 </body>
 </html>
