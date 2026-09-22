@@ -3,163 +3,480 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="Selvendiran S - Lead Data Engineer Portfolio." name="description"/>
+<meta content="Selvendiran S - Lead Data Engineer Portfolio. Specializing in enterprise ETL/ELT pipelines, distributed compute, and modern cloud architectures." name="description"/>
 <title>Selvendiran S | Data Engineer</title>
 <meta name="theme-color" content="#000000">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Selvendiran S | Data Engineer">
+<meta property="og:description" content="Data Engineer portfolio showcasing cloud data pipelines, analytics, ETL/ELT, and modern engineering projects.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23000'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Arial' font-size='34' font-weight='700' fill='%232997ff'%3ES%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 
 <style>
         :root {
+            --bg-color: #000000;
             --text-main: #f5f5f7;
             --text-muted: #a1a1a6;
             --text-sub: #d2d2d7;
             --accent: #2997ff;
+            --apple-blue: #0071e3;
+            --apple-hover: #0077ed;
+            --font-mono: 'JetBrains Mono', monospace;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Inter", sans-serif; -webkit-font-smoothing: antialiased; }
-        
-        html { background: #000; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html { scroll-behavior: auto !important; background: #000; }
         html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         .lenis.lenis-stopped { overflow: hidden; }
 
-        body { color: var(--text-main); overflow-x: hidden; letter-spacing: -0.015em; min-height: 100%; background: #000; }
+        body {
+            background-color: #000;
+            color: var(--text-main);
+            overflow-x: hidden;
+            cursor: default;
+            letter-spacing: -0.015em;
+            min-height: 100%;
+        }
 
         /* =========================
-           ZERO-LAG CANVAS
+           BACKGROUND CANVAS
         ========================= */
         #video-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 0; pointer-events: none; 
             transform: translateZ(0);
             backface-visibility: hidden;
-            background: #000; 
+            opacity: 1; /* Bright & clear original frames */
         }
         .video-overlay {
             position: fixed; inset: 0; z-index: 1; pointer-events: none;
-            background: rgba(0, 0, 0, 0.35); 
+            background: rgba(0, 0, 0, 0.22); /* Light overlay so text is crisp */
         }
 
-        .ui-layer { position: relative; z-index: 10; }
+        .ui-layer {
+            position: relative;
+            z-index: 10;
+        }
 
         /* =========================
-           NAVIGATION
+           NAVIGATION & MEGA MENU
         ========================= */
         nav {
-            position: fixed; top: 0; width: 100%; height: 52px; padding: 0 clamp(1.25rem, 5vw, 5rem);
+            position: fixed; top: 0; width: 100%; height: 52px;
+            padding: 0 clamp(1.25rem, 5vw, 5rem);
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.6); z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.5) !important; 
+            border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
         .nav-left { display: flex; align-items: center; gap: 3rem; }
-        .logo { font-weight: 600; font-size: 0.95rem; color: #f5f5f7; text-decoration: none; letter-spacing: -0.02em; }
+        .logo { 
+            font-weight: 600; font-size: 0.95rem; color: #f5f5f7; text-decoration: none; 
+            letter-spacing: -0.02em; transition: opacity 0.25s ease;
+        }
+        .logo:hover { opacity: 0.7; }
         
         .nav-links { display: flex; gap: 2.2rem; list-style: none; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; font-weight: 500; transition: color 0.2s ease; }
-        .nav-links a:hover { color: #ffffff; }
+        .nav-links li { position: static; }
+        .nav-links a { 
+            color: var(--text-muted); text-decoration: none; font-size: 0.8rem; 
+            font-weight: 400; transition: color 0.25s ease;
+        }
+        .nav-links a:hover, .nav-links a:focus { color: #ffffff; outline: none; }
 
-        .btn-primary { background: #fff; color: #000; padding: 0.4rem 1rem; border-radius: 980px; text-decoration: none; font-size: 0.75rem; font-weight: 600; transition: transform 0.2s ease; }
-        .btn-primary:hover { transform: scale(1.02); }
+        /* Resume Button */
+        .nav-right .btn-primary{
+            position:relative;
+            isolation:isolate;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            min-height:36px;
+            padding:0 18px;
+            border:1px solid rgba(255,255,255,.24);
+            border-radius:999px;
+            background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(225,231,240,.88));
+            color:#0a0d13;
+            font-size:.76rem;
+            font-weight:650;
+            letter-spacing:.015em;
+            text-decoration: none;
+            transition: transform .3s ease, background .3s ease;
+        }
+        .nav-right .btn-primary:hover {
+            background: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .mega-menu {
+            position: fixed; top: 52px; left: 0; width: 100%; max-height: calc(100dvh - 52px);
+            overflow-y: auto; overscroll-behavior: contain; padding: 3rem clamp(2rem, 7vw, 7rem) 3.5rem;
+            display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: clamp(2rem, 4vw, 4rem);
+            background: rgba(16, 16, 18, 0.95); border-bottom: 1px solid rgba(255,255,255,.12);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-8px);
+            transition: opacity .22s ease, transform .22s ease, visibility 0s linear .22s;
+            z-index: 99;
+        }
+
+        .nav-links li.has-mega-menu:hover > .mega-menu,
+        .nav-links li.has-mega-menu:focus-within > .mega-menu,
+        .nav-links li.has-mega-menu.menu-open > .mega-menu {
+            opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); transition-delay: 0s;
+        }
+
+        .mega-column { min-width: 0; }
+        .mega-column-title { color: var(--text-muted); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1.2rem; }
+        .mega-menu h3 { color: #f5f5f7; font-size: clamp(1.6rem, 2.2vw, 2.2rem); font-weight: 600; letter-spacing: -.03em; line-height: 1.1; margin: 0 0 0.8rem; }
+        .mega-menu p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+
+        .mega-links { display: grid; gap: 0.8rem; }
+        .mega-links a { color: #f5f5f7; text-decoration: none; font-size: 0.9rem; font-weight: 500; width: fit-content; transition: color .2s ease, transform .2s ease; }
+        .mega-links a:hover { color: var(--accent); transform: translateX(3px); }
+
+        .mega-feature { display: grid; gap: 1.2rem; }
+        .mega-feature-item { display: grid; grid-template-columns: 1.8rem 1fr; gap: .8rem; align-items: start; }
+        .mega-feature-icon { width: 1.5rem; height: 1.5rem; display: grid; place-items: center; color: var(--accent); font-size: 1.1rem; }
+        .mega-feature-item strong { display: block; color: #f5f5f7; font-size: 0.9rem; font-weight: 600; }
+        .mega-feature-item span { color: var(--text-muted); font-size: 0.82rem; }
+
+        .mega-cta { border-left: 1px solid rgba(255,255,255,.12); padding-left: clamp(1.5rem, 3vw, 3rem); }
+        .mega-button { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1.2rem; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; color: #fff; text-decoration: none; font-size: .85rem; transition: all .25s ease; }
+        .mega-button:hover { background: #fff; color: #000; border-color: #fff; }
 
         /* =========================
            HERO SECTION
         ========================= */
         .apple-hero {
             min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 8rem 1.5rem 4rem; position: relative; z-index: 5;
+            text-align: center; padding: 8rem 1.5rem 4rem; position: relative; z-index: 5; overflow: hidden;
         }
-        .apple-eyebrow { font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 600; letter-spacing: 0.04em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1.2rem; }
+        .apple-eyebrow { font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 500; letter-spacing: 0.04em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1.2rem; }
         .apple-hero-title {
-            font-size: clamp(3.2rem, 7.5vw, 6rem) !important; font-weight: 800 !important; letter-spacing: -0.04em !important; line-height: 1.05 !important;
-            color: #fff; margin-bottom: 1.2rem !important; text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            font-size: clamp(3.2rem, 7.5vw, 6rem) !important; font-weight: 700 !important; letter-spacing: -0.04em !important; line-height: 1.05 !important;
+            background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 1.2rem !important; text-wrap: balance;
         }
         .apple-hero-sub {
-            max-width: 600px; font-size: clamp(1.1rem, 1.8vw, 1.35rem); font-weight: 400; color: #d2d2d7; line-height: 1.5;
-            margin-bottom: 2.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            max-width: 600px; font-size: clamp(1.1rem, 1.8vw, 1.35rem); font-weight: 400; color: var(--text-muted); line-height: 1.5;
+            letter-spacing: -0.015em; margin-bottom: 2.5rem; text-wrap: balance;
         }
 
-        .apple-hero-ctas { display: flex; gap: 1.5rem; }
-        .apple-btn-primary { background: #2997ff; color: #fff; padding: 0.75rem 1.6rem; border-radius: 980px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: background 0.2s; }
-        .apple-btn-primary:hover { background: #0077ed; }
-        .apple-btn-link { color: #2997ff; font-size: 0.95rem; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; }
-        .apple-btn-link:hover { text-decoration: underline; }
+        .apple-hero-ctas { display: flex; align-items: center; justify-content: center; gap: 1.5rem; }
+        .apple-btn-primary { background: #ffffff; color: #000000; padding: 0.75rem 1.6rem; border-radius: 980px; font-size: 0.95rem; font-weight: 500; text-decoration: none; transition: all 0.25s ease; }
+        .apple-btn-primary:hover { background: #f5f5f7; transform: scale(1.02); }
+        .apple-btn-link { color: var(--accent); font-size: 0.95rem; font-weight: 400; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; transition: opacity 0.2s ease; }
+        .apple-btn-link:hover { text-decoration: underline; opacity: 0.85; }
+
+        .scroll-indicator {
+            position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
+            color: var(--text-muted); font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+            font-weight: 500; opacity: 0.6; animation: pulseOpacity 2.5s infinite;
+        }
+        @keyframes pulseOpacity { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; color: #fff; } }
 
         /* =========================
-           CONTENT CARDS (HIGH PERFORMANCE)
+           CONTENT SECTIONS & CARDS
         ========================= */
-        .content-wrapper { position: relative; z-index: 10; padding-top: 2vh; padding-bottom: 6rem; }
+        .content-wrapper { background: transparent; position: relative; z-index: 10; padding-top: 2vh; padding-bottom: 6rem; min-height: 100vh; }
 
         section { 
-            padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 4rem); 
-            max-width: 1100px; margin: 0 auto 3rem; 
-            background: rgba(12, 12, 15, 0.88);
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            border-radius: 20px;
+            padding: clamp(3.5rem, 6vw, 5.5rem) clamp(1.5rem, 5vw, 5rem); 
+            max-width: 1100px; 
+            margin: 0 auto 3rem; 
+            background: rgba(14, 18, 26, 0.55); /* Glass effect that stays smooth */
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            border-radius: 22px;
+            backdrop-filter: blur(12px) saturate(140%);
+            -webkit-backdrop-filter: blur(12px) saturate(140%);
+            transition: transform 0.3s ease, border-color 0.3s ease;
             scroll-margin-top: 5rem;
             contain: content;
-            transform: translateZ(0);
+        }
+        
+        section:hover {
+            border-color: rgba(255, 255, 255, 0.22);
+            transform: translateY(-2px);
         }
 
-        .section-header { margin-bottom: 2.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 1rem; }
-        .section-header h2 { font-size: 0.85rem; font-weight: 600; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; }
+        .section-header { margin-bottom: 2.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 1rem; }
+        .section-header h2 { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase; }
 
-        .experience-item { display: grid; grid-template-columns: 1fr 2.5fr; gap: 3rem; }
-        .exp-meta h3 { color: #fff; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.4rem; letter-spacing: -0.02em; line-height: 1.2; }
-        .exp-meta p { color: var(--text-muted); font-size: 0.95rem; font-weight: 500; }
-        .exp-details { color: #d2d2d7; font-size: 1rem; line-height: 1.6; }
+        .experience-item { display: grid; grid-template-columns: 1fr 2.5fr; gap: 4rem; }
+        .exp-meta h3 { color: #ffffff; font-size: 1.8rem; font-weight: 600; margin-bottom: 0.4rem; letter-spacing: -0.02em; line-height: 1.2; }
+        .exp-meta p { color: var(--text-muted); font-size: 1rem; font-weight: 400; }
+        .exp-details { color: var(--text-sub); font-size: 1.05rem; font-weight: 400; line-height: 1.65; }
         .exp-details p { margin-bottom: 1.2rem; }
 
-        .experience-list { margin: 1.2rem 0 0; padding-left: 1.2rem; color: #d2d2d7; }
-        .experience-list li { margin: .55rem 0; line-height: 1.6; }
+        .experience-list{margin:1.2rem 0 0;padding-left:1.2rem;color:var(--text-sub)}
+        .experience-list li{margin:.55rem 0;line-height:1.65}
 
         .tech-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
-        .tech-tag { background: rgba(255,255,255,0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 0.4rem 1rem; border-radius: 980px; font-size: 0.8rem; font-weight: 500; }
+        .tech-tag { background: rgba(255,255,255,0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: var(--text-main); padding: 0.45rem 1.1rem; border-radius: 980px; font-size: 0.8rem; font-weight: 400; transition: all 0.25s ease; }
+        .tech-tag:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.14); }
 
         .cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
-        .cert-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1.6rem; border-radius: 16px; text-decoration: none; }
-        .cert-icon { display:flex;align-items:center;justify-content:center;width:2.5rem;height:2.5rem;border-radius:8px;background:#2997ff;font-weight:700;color:#fff; margin-bottom: 1rem; }
-        .cert-card h3 { color: #fff; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .cert-card p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 0.8rem; }
-        .cert-link { color: var(--accent); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
+        .cert-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1.6rem; border-radius: 16px; transition: all 0.3s ease; text-decoration: none;}
+        .cert-card:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); }
+        .cert-icon { display:flex;align-items:center;justify-content:center;width:2.8rem;height:2.8rem;border-radius:.7rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-weight:700;color:#fff; margin-bottom: 1rem; }
+        .cert-card h3 { color: #fff; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; line-height: 1.3; }
+        .cert-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.45; margin-bottom: 0.8rem; }
+        .cert-link { color: var(--accent); font-size: 0.85rem; font-weight: 400; text-decoration: none; }
+        .cert-link:hover { text-decoration: underline; }
 
+        /* Social Contact Links */
         .contact-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
-        .contact-links .contact-link { display: inline-flex; align-items: center; gap: .65rem; padding: .7rem 1.2rem; border: 1px solid rgba(255,255,255,.1); border-radius: 999px; background: rgba(255,255,255,.05); color: #fff; text-decoration: none; }
-        .contact-links .contact-link svg { width: 1.5rem; height: 1.5rem; fill: currentColor; }
+        .contact-links .contact-link { display: inline-flex; align-items: center; gap: .65rem; min-height: 3rem; padding: .7rem 1.2rem; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.025); color: #fff; text-decoration: none; transition: all .25s ease; }
+        .contact-links .contact-link:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.28); transform: translateY(-2px); }
+        .contact-links .contact-link svg { width: 1.5rem; height: 1.5rem; display: block; fill: currentColor; }
         
-        footer { border-top: 1px solid rgba(255,255,255,.1); text-align: center; padding: 3rem 1rem; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; }
+        footer { border-top: 1px solid rgba(255,255,255,.08); text-align: center; padding: 4rem 1.25rem 3rem; color: var(--text-muted); font-size: 0.82rem; font-weight: 400; }
 
+        @media (max-width: 900px) {
+            .mega-menu { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .mega-cta { grid-column: 1 / -1; border-left: 0; border-top: 1px solid rgba(255,255,255,.12); padding: 1.5rem 0 0; }
+        }
         @media (max-width: 768px) {
             nav { height: 48px; padding: 0 1.2rem; }
-            .nav-links { display: none; }
+            .mega-menu { top: 48px; max-height: calc(100dvh - 48px); }
             .apple-hero { padding-top: 6.5rem; }
             .apple-hero-title { font-size: clamp(2.8rem, 11vw, 4.5rem) !important; }
-            section { padding: 2.5rem 1.2rem; margin: 0 1rem 2rem 1rem; }
+            section { padding: 2.5rem 1.2rem; }
             .experience-item { grid-template-columns: 1fr; gap: 1.5rem; }
+        }
+        @media (max-width: 700px) {
+            .nav-left { width: 100%; justify-content: space-between; }
+            .nav-links { display: flex; gap: 1.2rem; overflow-x: auto; scrollbar-width: none; }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-links a { white-space: nowrap; }
+            .nav-right { display: none; }
         }
 </style>
 </head>
 <body>
 
-<!-- CANVASES AND OVERLAYS -->
+<!-- CANVAS BACKGROUND -->
 <canvas id="video-canvas"></canvas>
 <div class="video-overlay"></div>
 
 <div class="ui-layer" id="ui-layer">
-    <nav>
+    <!-- NAVIGATION WITH MEGA MENU -->
+    <nav aria-label="Main Navigation">
         <div class="nav-left">
-            <a class="logo" href="#main">Selvendiran S</a>
+            <a aria-label="Home" class="logo" href="#main">Selvendiran S</a>
             <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#skills">Stack</a></li>
-                <li><a href="#certs">Certifications</a></li>
+                <li class="has-mega-menu">
+                    <a href="#about">About</a>
+                    <div class="mega-menu" role="menu">
+                        <div class="mega-column">
+                            <div class="mega-column-title">EXPLORE</div>
+                            <div class="mega-links">
+                                <a href="#about">About Me</a>
+                                <a href="#about">Career Vision</a>
+                                <a href="#experience">Cognizant Journey</a>
+                                <a href="#certs">Certifications</a>
+                            </div>
+                        </div>
+                        <div class="mega-column">
+                            <div class="mega-column-title">FOCUS AREAS</div>
+                            <div class="mega-feature">
+                                <div class="mega-feature-item">
+                                    <div class="mega-feature-icon">⚡</div>
+                                    <div><strong>Distributed Compute</strong><span>PySpark, Spark SQL</span></div>
+                                </div>
+                                <div class="mega-feature-item">
+                                    <div class="mega-feature-icon">☁</div>
+                                    <div><strong>Cloud Architecture</strong><span>AWS &amp; Azure Lakes</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mega-column">
+                            <div class="mega-column-title">QUICK LINKS</div>
+                            <div class="mega-links">
+                                <a href="#experience">→ View Experience</a>
+                                <a href="#skills">→ Explore Stack</a>
+                                <a href="#certs">→ Gemini Initiative Lab</a>
+                                <a href="#contact">→ Contact Me</a>
+                            </div>
+                        </div>
+                        <div class="mega-cta">
+                            <div class="mega-column-title">ENTERPRISE DATA PIPELINES</div>
+                            <h3>Data. Cloud. Scale.</h3>
+                            <p>Building high-throughput ELT architectures and low-latency lakehouses.</p>
+                            <a class="mega-button" href="#contact">Get in Touch <span>→</span></a>
+                        </div>
+                    </div>
+                </li>
+                <li class="has-mega-menu">
+                    <a href="#experience">Experience</a>
+                    <div class="mega-menu" role="menu">
+                        <div class="mega-column">
+                            <div class="mega-column-title">ROLES</div>
+                            <div class="mega-links">
+                                <a href="#experience">Cognizant - Data Engineer</a>
+                                <a href="#experience">On-Prem to Cloud Migration</a>
+                                <a href="#experience">ETL Optimization</a>
+                            </div>
+                        </div>
+                        <div class="mega-column">
+                            <div class="mega-column-title">HIGHLIGHTS</div>
+                            <div class="mega-feature">
+                                <div class="mega-feature-item">
+                                    <div class="mega-feature-icon">◈</div>
+                                    <div><strong>Massive Scale</strong><span>Terabyte-level datasets</span></div>
+                                </div>
+                                <div class="mega-feature-item">
+                                    <div class="mega-feature-icon">⌘</div>
+                                    <div><strong>Query Optimization</strong><span>Drastic lag reduction</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mega-column">
+                            <div class="mega-column-title">STACK USED</div>
+                            <div class="mega-links">
+                                <a href="#skills">Apache Spark &amp; Airflow</a>
+                                <a href="#skills">Snowflake Warehouse</a>
+                                <a href="#skills">AWS Glue &amp; S3</a>
+                            </div>
+                        </div>
+                        <div class="mega-cta">
+                            <div class="mega-column-title">PRODUCTION SYSTEMS</div>
+                            <h3>Engineering that<br/>scales smoothly.</h3>
+                            <p>Delivering resilient pipelines with zero data loss and automated monitoring.</p>
+                            <a class="mega-button" href="#experience">View Journey <span>→</span></a>
+                        </div>
+                    </div>
+                </li>
+                <li class="has-mega-menu">
+                    <a href="#skills">Stack</a>
+                    <div class="mega-menu" role="menu">
+                        <div class="mega-column">
+                            <div class="mega-column-title">CATEGORIES</div>
+                            <div class="mega-links">
+                                <a href="#skills">Processing Engines</a>
+                                <a href="#skills">Orchestration &amp; Streaming</a>
+                                <a href="#skills">Cloud Warehouses</a>
+                            </div>
+                        </div>
+                        <div class="mega-column">
+                            <div class="mega-column-title">FEATURED TECH</div>
+                            <div class="mega-feature">
+                                <div class="mega-feature-item">
+                                    <div class="mega-feature-icon">◇</div>
+                                    <div><strong>Databases</strong><span>Snowflake, PostgreSQL</span></div>
+                                </div>
+                                <div class="mega-feature-item">
+                                    <div class="mega-feature-icon">⚡</div>
+                                    <div><strong>Streaming</strong><span>Apache Kafka pipelines</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mega-column">
+                            <div class="mega-column-title">QUICK LINKS</div>
+                            <div class="mega-links">
+                                <a href="#skills">→ Compute Stack</a>
+                                <a href="#skills">→ Cloud Services</a>
+                                <a href="#contact">→ Architecture Discussion</a>
+                            </div>
+                        </div>
+                        <div class="mega-cta">
+                            <div class="mega-column-title">MODERN DATA ENGINE</div>
+                            <h3>Tools behind<br/>the architecture.</h3>
+                            <p>A reliable set of framework tools built for enterprise processing.</p>
+                            <a class="mega-button" href="#skills">Inspect Stack <span>→</span></a>
+                        </div>
+                    </div>
+                </li>
+                <li class="has-mega-menu">
+                    <a href="#certs">Certifications</a>
+                    <div class="mega-menu" role="menu">
+                        <div class="mega-column">
+                            <div class="mega-column-title">CREDENTIALS</div>
+                            <div class="mega-links">
+                                <a href="#certs">Gemini Initiative Lab</a>
+                                <a href="#certs">Data Analytics PG Program</a>
+                                <a href="#certs">SQL &amp; Platform Certs</a>
+                                <a href="#certs">Best Student Award</a>
+                            </div>
+                        </div>
+                        <div class="mega-column">
+                            <div class="mega-column-title">FEATURED LAB</div>
+                            <div class="mega-feature">
+                                <div class="mega-feature-item">
+                                    <div class="mega-feature-icon">✦</div>
+                                    <div><strong>Build with Gemini</strong><span>In-Person AI &amp; Data Lab</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mega-column">
+                            <div class="mega-column-title">QUICK LINKS</div>
+                            <div class="mega-links">
+                                <a href="#certs">→ View All Credentials</a>
+                                <a href="#contact">→ Get Resume Copy</a>
+                            </div>
+                        </div>
+                        <div class="mega-cta">
+                            <div class="mega-column-title">CONTINUOUS LEARNING</div>
+                            <h3>Validated skills &amp;<br/>industry milestones.</h3>
+                            <p>Deepening engineering practices through specialized certifications and labs.</p>
+                            <a class="mega-button" href="#certs">Explore Certs <span>→</span></a>
+                        </div>
+                    </div>
+                </li>
+                <li class="has-mega-menu">
+                    <a href="#contact">Contact</a>
+                    <div class="mega-menu" role="menu">
+                        <div class="mega-column">
+                            <div class="mega-column-title">CONNECT</div>
+                            <div class="mega-links">
+                                <a aria-label="Compose an email in Gmail" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=abishake06042002@gmail.com" rel="noopener noreferrer" target="_blank">Email Direct</a>
+                                <a aria-label="Open LinkedIn profile" href="https://www.linkedin.com/in/selvendiran-s-6a91351a8/" rel="noopener noreferrer" target="_blank">LinkedIn Profile</a>
+                                <a aria-label="Open GitHub profile" href="https://github.com/selva0604200" rel="noopener noreferrer" target="_blank">GitHub Repos</a>
+                            </div>
+                        </div>
+                        <div class="mega-column">
+                            <div class="mega-column-title">STATUS</div>
+                            <div class="mega-feature">
+                                <div class="mega-feature-item">
+                                    <div class="mega-feature-icon">↗</div>
+                                    <div><strong>Open for Roles</strong><span>Lead Data Engineer</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mega-column">
+                            <div class="mega-column-title">QUICK ACTIONS</div>
+                            <div class="mega-links">
+                                <a aria-label="Request a resume copy" download="" href="#contact">→ Request Resume Copy</a>
+                                <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=abishake06042002@gmail.com" rel="noopener noreferrer" target="_blank">→ Send Email</a>
+                            </div>
+                        </div>
+                        <div class="mega-cta">
+                            <div class="mega-column-title">LETS BUILD TOGETHER</div>
+                            <h3>Architecting scalable<br/>data platforms.</h3>
+                            <p>Have a complex pipeline challenge or opportunity? Let's connect.</p>
+                            <a class="mega-button" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=abishake06042002@gmail.com" rel="noopener noreferrer" target="_blank">Say Hello <span>→</span></a>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
         <div class="nav-right">
-            <a class="btn-primary" download="" href="#contact">Resume</a>
+            <a aria-label="Request a resume copy" class="btn-primary" download="" href="#contact">Resume</a>
         </div>
     </nav>
 
@@ -170,8 +487,9 @@
             <p class="apple-hero-sub">Architecting high-throughput pipelines, distributed compute engines, and modern cloud platforms.</p>
             <div class="apple-hero-ctas">
                 <a class="apple-btn-primary" href="#experience">Explore Work</a>
-                <a class="apple-btn-link" href="#contact">Get in touch ›</a>
+                <a class="apple-btn-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=abishake06042002@gmail.com" rel="noopener noreferrer" target="_blank">Get in touch <span class="chevron">›</span></a>
             </div>
+            <div aria-hidden="true" class="scroll-indicator">Scroll to explore</div>
         </div>
 
         <div class="content-wrapper">
@@ -185,9 +503,10 @@
                     <div class="exp-details">
                         <p>My core focus is designing enterprise-grade, event-driven cloud platforms. I specialize in bridging the gap between vast, unstructured data lakes and clean, queryable architectures.</p>
                         <p>I build automated data transformation pipelines, optimize distributed processing jobs, and eliminate query bottlenecks. Equally comfortable writing PySpark scripts, tuning complex SQL queries, or orchestrating DAGs in Airflow.</p>
-                        <div class="tech-list">
+                        <div aria-label="Quick Info" class="tech-list" style="margin-top: 1.5rem;">
                             <span class="tech-tag">Location: Chennai, India</span>
-                            <span class="tech-tag">Focus: High-Scalability ETL</span>
+                            <span class="tech-tag">Languages: English, Tamil</span>
+                            <span class="tech-tag">Focus: High-Scalability ETL/ELT &amp; Lakehouse Architectures</span>
                         </div>
                     </div>
                 </div>
@@ -199,18 +518,24 @@
                     <div class="exp-meta">
                         <h3>Cognizant</h3>
                         <p>Data Engineer</p>
-                        <p style="margin-top:.3rem;font-size:.85rem;color:var(--text-muted);">Dec 2025 – Present</p>
+                        <p style="margin-top:.3rem;font-size:.9rem;color:var(--text-muted);">Dec 2025 – Present · Chennai, Tamil Nadu, India · Hybrid</p>
                     </div>
                     <div class="exp-details">
                         <ul class="experience-list">
                             <li>Data Engineer with hands-on experience in building and supporting data solutions on AWS Cloud.</li>
                             <li>Experience in developing ETL/ELT workflows using AWS Glue, Lambda, and Step Functions.</li>
                             <li>Worked with datasets using Amazon S3, Redshift, and Athena for data processing and analysis.</li>
+                            <li>Understanding of real-time and batch data processing using AWS services like Kinesis.</li>
+                            <li>Proficient in SQL and Python for data transformation and pipeline development.</li>
+                            <li>Good understanding of data warehousing concepts and basic data modeling.</li>
+                            <li>Focused on maintaining data quality, consistency, and reliable data workflows.</li>
                         </ul>
-                        <div class="tech-list">
-                            <span class="tech-tag">Python</span>
+                        <div aria-label="Data Engineer skills" class="tech-list">
+                            <span class="tech-tag">Python (Programming Language)</span>
                             <span class="tech-tag">SQL</span>
-                            <span class="tech-tag">AWS Glue</span>
+                            <span class="tech-tag">Data Warehousing</span>
+                            <span class="tech-tag">Extract, Transform, Load (ETL)</span>
+                            <span class="tech-tag">Amazon Web Services (AWS)</span>
                         </div>
                     </div>
                 </div>
@@ -219,17 +544,20 @@
                     <div class="exp-meta">
                         <h3>Program Analyst Trainee</h3>
                         <p>Cognizant</p>
-                        <p style="margin-top:.3rem;font-size:.85rem;color:var(--text-muted);">Dec 2024 – Dec 2025</p>
+                        <p style="margin-top:.3rem;font-size:.9rem;color:var(--text-muted);">Dec 2024 – Dec 2025 · 1 yr 1 mo</p>
                     </div>
                     <div class="exp-details">
                         <ul class="experience-list">
                             <li>Gained hands-on experience in analyzing business and technical requirements.</li>
                             <li>Assisted in developing and maintaining applications based on project needs.</li>
+                            <li>Worked with teams to understand workflows and improve processes.</li>
                             <li>Supported data analysis and reporting using SQL and basic programming.</li>
                         </ul>
-                        <div class="tech-list">
+                        <div aria-label="Program Analyst Trainee skills" class="tech-list">
                             <span class="tech-tag">SQL</span>
+                            <span class="tech-tag">Programming</span>
                             <span class="tech-tag">Data Analysis</span>
+                            <span class="tech-tag">Problem Solving</span>
                         </div>
                     </div>
                 </div>
@@ -237,14 +565,20 @@
                 <div class="experience-item">
                     <div class="exp-meta">
                         <h3>Accounts Receivable Caller</h3>
-                        <p>Omega Healthcare Management</p>
-                        <p style="margin-top:.3rem;font-size:.85rem;color:var(--text-muted);">Jun 2023 – Nov 2024</p>
+                        <p>Omega Healthcare Management Services · Full-time</p>
+                        <p style="margin-top:.3rem;font-size:.9rem;color:var(--text-muted);">Jun 2023 – Nov 2024 · 1 yr 6 mos · Tamil Nadu, India · On-site</p>
                     </div>
                     <div class="exp-details">
                         <ul class="experience-list">
-                            <li>Managed accounts receivable by following up with insurance providers on claim status.</li>
-                            <li>Investigated and resolved denied, rejected, and pending claims.</li>
+                            <li>Managed accounts receivable by following up with insurance providers on claim status and payments.</li>
+                            <li>Investigated and resolved denied, rejected, and pending claims to ensure timely reimbursements.</li>
+                            <li>Analyzed claim issues and took appropriate actions to improve collection outcomes.</li>
                         </ul>
+                        <div aria-label="Accounts Receivable Caller skills" class="tech-list">
+                            <span class="tech-tag">Communication</span>
+                            <span class="tech-tag">Analytical Skills</span>
+                            <span class="tech-tag">Attention to Detail</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -257,18 +591,34 @@
                         <p>Core Engineering Stack</p>
                     </div>
                     <div class="exp-details">
-                        <p style="margin-bottom: 1rem; color: #fff; font-weight: 600;">Compute &amp; Data Processing</p>
-                        <div class="tech-list" style="margin-bottom: 2rem;">
-                            <span class="tech-tag">Apache Spark (PySpark)</span>
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">SQL</span>
+                        <p>A focused toolkit for engineering dependable distributed pipelines, cloud data platforms, and automated workflow DAGs.</p>
+                        <div style="margin-top: 1.8rem;">
+                            <p style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 600;">Compute &amp; Data Processing</p>
+                            <div class="tech-list">
+                                <span class="tech-tag">Apache Spark (PySpark)</span>
+                                <span class="tech-tag">Python</span>
+                                <span class="tech-tag">SQL</span>
+                                <span class="tech-tag">C / C++</span>
+                            </div>
                         </div>
-                        
-                        <p style="margin-bottom: 1rem; color: #fff; font-weight: 600;">Orchestration &amp; Cloud</p>
-                        <div class="tech-list">
-                            <span class="tech-tag">Apache Airflow</span>
-                            <span class="tech-tag">AWS (S3, Glue)</span>
-                            <span class="tech-tag">Snowflake</span>
+                        <div style="margin-top: 1.8rem;">
+                            <p style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 600;">Orchestration &amp; Streaming</p>
+                            <div class="tech-list">
+                                <span class="tech-tag">Apache Airflow</span>
+                                <span class="tech-tag">Apache Kafka</span>
+                                <span class="tech-tag">Event-Driven Pipelines</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1.8rem;">
+                            <p style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 600;">Cloud &amp; Warehousing</p>
+                            <div class="tech-list">
+                                <span class="tech-tag">AWS (S3, Glue)</span>
+                                <span class="tech-tag">Azure Data Factory</span>
+                                <span class="tech-tag">Snowflake</span>
+                                <span class="tech-tag">PostgreSQL</span>
+                                <span class="tech-tag">Linux</span>
+                                <span class="tech-tag">Git</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -279,21 +629,27 @@
                 <div class="cert-grid">
                     <div class="cert-card">
                         <div class="cert-icon">AI</div>
-                        <h3>Claude Partner Badge</h3>
+                        <h3>Claude Partner Badge - Claude Code</h3>
                         <p>Anthropic · Issued Sep 2026</p>
-                        <a class="cert-link" href="#" target="_blank">Show credential ↗</a>
+                        <a aria-label="Open Claude certificate credential" class="cert-link" href="https://www.credly.com/badges/f3dc86b3-9f07-497d-8925-32d9a602271d/linked_in_profile" rel="noopener noreferrer" target="_blank">Show credential ↗</a>
                     </div>
                     <div class="cert-card">
                         <div class="cert-icon">AI</div>
-                        <h3>AI Fluency</h3>
+                        <h3>Certificate of Completion: AI Fluency Framework &amp; Foundations</h3>
                         <p>Anthropic · Issued Sep 2026</p>
-                        <a class="cert-link" href="#" target="_blank">Show credential ↗</a>
+                        <a aria-label="Open AI Fluency certificate credential" class="cert-link" href="https://verify.skilljar.com/c/52ratjsamy5w" rel="noopener noreferrer" target="_blank">Show credential ↗</a>
                     </div>
                     <div class="cert-card">
                         <div class="cert-icon">◆</div>
-                        <h3>Context Engineering</h3>
+                        <h3>Context Engineering Foundation</h3>
                         <p>Cognizant · Issued Apr 2026</p>
-                        <a class="cert-link" href="#" target="_blank">Show credential ↗</a>
+                        <a aria-label="Open Context Engineering certificate credential" class="cert-link" href="https://www.credly.com/badges/f58fcdc2-a8cc-4c02-a352-4ae7a851d3b5/linked_in_profile" rel="noopener noreferrer" target="_blank">Show credential ↗</a>
+                    </div>
+                    <div class="cert-card">
+                        <div class="cert-icon">◆</div>
+                        <h3>Vibe Code Hackathon - Vibe Coded</h3>
+                        <p>Cognizant · Issued Nov 2025</p>
+                        <a aria-label="Open Vibe Coding certificate credential" class="cert-link" href="https://www.credly.com/badges/e2568e69-1ad3-46e8-b6b5-45da7da3230a/linked_in_profile" rel="noopener noreferrer" target="_blank">Show credential ↗</a>
                     </div>
                 </div>
             </section>
@@ -308,12 +664,16 @@
                     <div class="exp-details">
                         <p>Whether you have a massive data lake problem that needs architecture, complex Spark pipelines that require tuning, or just want to discuss modern data tech, my inbox is open.</p>
                         <div class="contact-links">
-                            <a class="contact-link" href="mailto:abishake06042002@gmail.com" target="_blank">
-                                <svg viewBox="0 0 24 24"><path d="M3.5 18.5V5.8L12 12.2l8.5-6.4v12.7" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M3.5 5.8A2.3 2.3 0 0 1 5.8 3.5h12.4a2.3 2.3 0 0 1 2.3 2.3" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="2"></path></svg>
-                                <span>Email Me</span>
+                            <a aria-label="Gmail" class="contact-link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=abishake06042002@gmail.com" rel="noopener noreferrer" target="_blank">
+                                <svg aria-hidden="true" class="icon-brand icon-gmail" viewBox="0 0 24 24"><path d="M3.5 18.5V5.8L12 12.2l8.5-6.4v12.7" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"></path><path d="M3.5 5.8A2.3 2.3 0 0 1 5.8 3.5h12.4a2.3 2.3 0 0 1 2.3 2.3" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="1.9"></path><path d="M3.5 18.5V5.8L12 12.2" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"></path><path d="M12 12.2 20.5 5.8v12.7" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9"></path></svg>
+                                <span>Gmail</span>
                             </a>
-                            <a class="contact-link" href="https://github.com/selva0604200" target="_blank">
-                                <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.292-1.552 3.297-1.23 3.297-1.23.647 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.823 1.102.823 2.222v3.293c0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12z"></path></svg>
+                            <a aria-label="LinkedIn" class="contact-link" href="https://www.linkedin.com/in/selvendiran-s-6a91351a8/" rel="noopener noreferrer" target="_blank">
+                                <svg aria-hidden="true" class="icon-brand icon-linkedin" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V8.999h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.287zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM3.555 20.452h3.558V8.999H3.555v11.453z" fill="#ffffff"></path></svg>
+                                <span>LinkedIn</span>
+                            </a>
+                            <a aria-label="GitHub" class="contact-link" href="https://github.com/selva0604200" rel="noopener noreferrer" target="_blank">
+                                <svg aria-hidden="true" class="icon-brand icon-github" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.292-1.552 3.297-1.23 3.297-1.23.647 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.823 1.102.823 2.222v3.293c0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12z" fill="#ffffff"></path></svg>
                                 <span>GitHub</span>
                             </a>
                         </div>
@@ -321,7 +681,7 @@
                 </div>
             </section>
 
-            <footer>Selvendiran S © 2026. Lead Data Engineer.</footer>
+            <footer>Selvendiran S © 2026. Lead Data Engineer. Built with world-class precision.</footer>
         </div>
     </main>
 </div>
@@ -331,8 +691,40 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
+<!-- MEGA MENU SCRIPT -->
 <script>
-/* 1. Initialize Lenis Smooth Scroll Engine */
+(() => {
+  const items = [...document.querySelectorAll('.nav-links li.has-mega-menu')];
+  const closeAll = except => items.forEach(item => {
+    if (item !== except) {
+      item.classList.remove('menu-open');
+      item.querySelector(':scope > a')?.setAttribute('aria-expanded','false');
+    }
+  });
+  items.forEach(item => {
+    const trigger=item.querySelector(':scope > a');
+    const menu=item.querySelector(':scope > .mega-menu');
+    if(!trigger||!menu)return;
+    trigger.setAttribute('aria-haspopup','true');
+    trigger.setAttribute('aria-expanded','false');
+    trigger.addEventListener('click',e=>{
+      if(window.matchMedia('(max-width: 767px)').matches){
+        e.preventDefault();
+        const open=item.classList.contains('menu-open');
+        closeAll();
+        if(!open){item.classList.add('menu-open');trigger.setAttribute('aria-expanded','true');}
+      }
+    });
+    menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>closeAll()));
+  });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAll();document.activeElement?.blur();}});
+  document.addEventListener('click',e=>{if(!e.target.closest('.nav-links li.has-mega-menu'))closeAll();});
+})();
+</script>
+
+<!-- INSTANT MOUNT & 60FPS CANVAS ENGINE -->
+<script>
+/* 1. Lenis Smooth Scroll Engine */
 const lenis = new Lenis({ 
     duration: 0.8, 
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
@@ -355,7 +747,7 @@ const currentFrame = index => (`frames/ezgif-frame-${(index + 1).toString().padS
 const images = [];
 const sequence = { frame: 0 }; 
 
-/* 3. Preload & Hardware Decode Images */
+/* 3. Preload Images in Background */
 for (let i = 0; i < frameCount; i++) {
     const img = new Image();
     img.src = currentFrame(i);
@@ -365,7 +757,7 @@ for (let i = 0; i < frameCount; i++) {
     images.push(img);
 }
 
-/* 4. Decoupled 60fps Render Loop */
+/* 4. Decoupled Render Loop */
 let lastRenderedFrame = -1;
 
 function drawFrame() {
