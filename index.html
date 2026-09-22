@@ -20,7 +20,6 @@
            CORE VARIABLES & RESET
         ========================= */
         :root {
-            --bg-color: #000000;
             --text-main: #f5f5f7;
             --text-muted: #a1a1a6;
             --text-sub: #d2d2d7;
@@ -73,11 +72,11 @@
         #video-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 0; pointer-events: none; transform: translateZ(0);
-            opacity: 0.8; /* Slightly dimmed so UI stands out */
+            opacity: 1; /* Full brightness for the video frames */
         }
         .video-overlay {
             position: fixed; inset: 0; z-index: 1; pointer-events: none;
-            /* Radial dark fade to make the text pop perfectly */
+            /* A subtle dark fade so your text remains easy to read over the video */
             background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%);
         }
 
@@ -96,8 +95,6 @@
             background: transparent !important; 
             border-bottom: none !important;
             z-index: 100;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
         }
 
         .nav-left { display: flex; align-items: center; gap: 3rem; }
@@ -114,17 +111,6 @@
             font-weight: 400; transition: color 0.25s ease;
         }
         .nav-links a:hover, .nav-links a:focus { color: #ffffff; outline: none; }
-
-        .btn-primary {
-            background: var(--apple-blue);
-            color: #ffffff; padding: 0.35rem 0.9rem; border-radius: 980px;
-            text-decoration: none; font-size: 0.75rem; font-weight: 400;
-            transition: all 0.25s ease;
-        }
-        .btn-primary:hover, .btn-primary:focus { 
-            background: var(--apple-hover);
-            outline: none;
-        }
 
         /* Apple-inspired Resume control */
         .nav-right .btn-primary{
@@ -154,6 +140,7 @@
                 box-shadow .35s ease,
                 background .35s ease,
                 border-color .35s ease;
+            text-decoration: none;
         }
         .nav-right .btn-primary::before{
             content:"";
@@ -176,10 +163,6 @@
                 0 14px 34px rgba(0,0,0,.28),
                 0 0 28px rgba(255,255,255,.10);
             outline:none;
-        }
-        .nav-right .btn-primary:active{
-            transform:translateY(0) scale(.985);
-            box-shadow:0 4px 14px rgba(0,0,0,.2);
         }
 
         .mega-menu {
@@ -256,9 +239,7 @@
 
         /* iOS-inspired liquid glass system */
         :root{
-            --glass-bg:rgba(255,255,255,.075);
             --glass-border:rgba(255,255,255,.16);
-            --glass-shadow:0 20px 70px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.10);
             --apple-glass: rgba(13,18,31,.42);
         }
 
@@ -299,7 +280,7 @@
         .tech-tag:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.14); }
 
         .cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
-        .cert-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1.6rem; border-radius: 16px; transition: all 0.3s ease; }
+        .cert-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1.6rem; border-radius: 16px; transition: all 0.3s ease; text-decoration: none;}
         .cert-card:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); }
         .cert-icon { display:flex;align-items:center;justify-content:center;width:2.8rem;height:2.8rem;border-radius:.7rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-weight:700;color:#fff; margin-bottom: 1rem; }
         .cert-card h3 { color: #fff; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; line-height: 1.3; }
@@ -346,16 +327,16 @@
 
 <!-- CINEMATIC PRELOADER -->
 <div id="preloader">
-    <div class="preloader-text">Loading Assets</div>
+    <div class="preloader-text">Loading Experience</div>
     <div class="preloader-bar"><div class="preloader-fill" id="preloader-fill"></div></div>
 </div>
 
-<!-- MAGIC CANVAS BACKGROUND (Replaces Galaxy) -->
+<!-- MAGIC CANVAS BACKGROUND (Stars completely removed) -->
 <canvas id="video-canvas"></canvas>
 <div class="video-overlay"></div>
 
 <div class="ui-layer" id="ui-layer">
-    <!-- NAVIGATION (Exactly as you styled it) -->
+    <!-- NAVIGATION -->
     <nav aria-label="Main Navigation">
         <div class="nav-left">
             <a aria-label="Home" class="logo" href="#main">Selvendiran S</a>
@@ -750,7 +731,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-<!-- MEGA MENU JS (Unchanged) -->
+<!-- MEGA MENU JS -->
 <script>
 (() => {
   const items = [...document.querySelectorAll('.nav-links li.has-mega-menu')];
@@ -803,7 +784,7 @@ const ctx = canvas.getContext("2d");
 
 // --- CONFIGURATION ---
 const frameCount = 150; 
-// Ensures it looks for frames/ezgif-frame-001.jpg just like before
+// Formatted to look for your EZGIF images inside the frames folder
 const currentFrame = index => (`frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.jpg`);
 
 const images = [];
