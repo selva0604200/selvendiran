@@ -6,7 +6,7 @@
 <title>Selvendiran | Portfolio</title>
 <style>
 /* =========================
-   RESET & SMOOTH SCROLL
+   RESET & SMOOTH SCROLL SETUP
 ========================= */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { background: #02040a; }
@@ -18,14 +18,19 @@ html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
 body { background: transparent; color: white; font-family: Arial, Helvetica, sans-serif; }
 
 /* =========================
-   BACKGROUND CANVAS
+   HARDWARE-ACCELERATED VIDEO
 ========================= */
-#video-canvas {
-    position: fixed; inset: 0; width: 100vw; height: 100vh;
-    z-index: 0; pointer-events: none; background: #02040a;
+#background-video {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    object-fit: cover; /* Perfectly fits the screen */
+    z-index: 0;
+    pointer-events: none;
+    /* Forces the browser to use GPU acceleration */
+    transform: translateZ(0); 
+    will-change: transform;
 }
-/* We hide the actual video and draw it to the canvas for better performance */
-#background-video { display: none; }
 
 .video-overlay {
     position: fixed; inset: 0; z-index: 1; pointer-events: none;
@@ -130,10 +135,9 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
 
 <body>
 
-<!-- BACKGROUND CANVAS & VIDEO -->
-<canvas id="video-canvas"></canvas>
-<!-- The Video is hidden. The Canvas draws the video frames perfectly. -->
-<video id="background-video" src="airport.mp4" muted playsinline preload="auto"></video>
+<!-- RAW GPU HARDWARE ACCELERATED VIDEO -->
+<!-- Using raw video instead of canvas lets your computer's GPU take over completely -->
+<video id="background-video" muted playsinline preload="auto"></video>
 <div class="video-overlay"></div>
 
 <!-- SCROLL PROGRESS -->
@@ -163,7 +167,6 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
             <a href="#contact" class="button">Contact Me</a>
         </div>
     </div>
-    <div class="scroll-hint"><span class="scroll-line"></span>Scroll to explore</div>
 </section>
 
 <!-- ABOUT -->
@@ -249,105 +252,68 @@ footer { display: flex; justify-content: space-between; padding: 28px 8vw; borde
     <span>Built with curiosity.</span>
 </footer>
 
-<!-- 1. IMPORT LENIS FOR BUTTERY SMOOTH PAGE SCROLLING -->
-<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<!-- 1. IMPORT LENIS (Scroll Physics) AND GSAP (Animation Engine) -->
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
 <script>
 /* =========================================================
-   THE ULTIMATE, CLEANEST VIDEO SCRUBBER
+   THE GSAP + LENIS ULTIMATE SCROLL STACK
 ========================================================= */
 
-// --- 1. SETUP SMOOTH SCROLL (LENIS) ---
-// This turns rigid mouse-wheel clicks into a beautiful, gliding animation.
+// 1. Initialize Lenis (Buttery Scroll)
 const lenis = new Lenis({
     duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Apple-like easing
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
     smoothWheel: true,
 });
 
-let scrollProgress = 0; // A number from 0.00 to 1.00
+// Hook Lenis into GSAP ScrollTrigger
+lenis.on('scroll', ScrollTrigger.update);
 
-lenis.on('scroll', (e) => {
-    // Lenis gives us a perfectly smooth progress number as the page glides
-    scrollProgress = Math.max(0, Math.min(e.progress, 1));
+gsap.ticker.add((time)=>{
+  lenis.raf(time * 1000);
 });
+gsap.ticker.lagSmoothing(0, 0);
 
-function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
-
-// --- 2. SETUP VIDEO & CANVAS ---
+// 2. Video Loading & Scrubbing
 const video = document.getElementById("background-video");
-const canvas = document.getElementById("video-canvas");
-const ctx = canvas.getContext("2d");
 const progressBar = document.getElementById("progress-bar");
 const navbar = document.getElementById("navbar");
 
-let isSeeking = false; // The absolute most important variable to stop stuttering
+// We still load the video into memory (Blob) so it reads instantly without HDD delay
+fetch('airport.mp4')
+    .then(response => response.blob())
+    .then(blob => {
+        video.src = URL.createObjectURL(blob);
+        video.load();
+    });
 
-// Resize the canvas to perfectly cover the screen (Object-Fit: Cover)
-function resizeCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
-    drawFrame();
-}
-
-// Draw the current video frame onto the canvas
-function drawFrame() {
-    if (video.videoWidth) {
-        const cw = canvas.width;
-        const ch = canvas.height;
-        const vw = video.videoWidth;
-        const vh = video.videoHeight;
-        
-        const ratio = Math.max(cw / vw, ch / vh);
-        const cx = (cw - vw * ratio) / 2;
-        const cy = (ch - vh * ratio) / 2;
-
-        ctx.clearRect(0, 0, cw, ch);
-        ctx.drawImage(video, 0, 0, vw, vh, cx, cy, vw * ratio, vh * ratio);
-    }
-}
-
-// When the video finishes finding the frame, unlock the seeker and draw it!
-video.addEventListener("seeked", () => {
-    isSeeking = false;
-    drawFrame();
-});
-
-// --- 3. THE MAGIC SYNC LOOP ---
-// We match the video directly to the Lenis smooth-scroll progress. 
-function syncVideo() {
-    if (video.readyState >= 2) {
-        const targetTime = scrollProgress * video.duration;
-
-        // Update the Progress Bar UI
-        progressBar.style.width = `${scrollProgress * 100}%`;
-
-        // Update the Navbar UI
-        if (window.scrollY > 40) navbar.classList.add("scrolled");
-        else navbar.classList.remove("scrolled");
-
-        // ONLY request a new frame if we are out of sync AND the browser isn't busy seeking
-        if (!isSeeking && Math.abs(video.currentTime - targetTime) > 0.02) {
-            isSeeking = true; // Lock it!
-            video.currentTime = targetTime; // Snap to the smooth target time
-        }
-    }
-    
-    requestAnimationFrame(syncVideo);
-}
-
-// Start everything when the video is ready
 video.addEventListener("loadedmetadata", () => {
-    resizeCanvas();
-    requestAnimationFrame(syncVideo);
+    // We let GSAP (The most powerful animation library) handle the video timing mathematically
+    gsap.to(video, {
+        scrollTrigger: {
+            trigger: document.body,
+            start: "top top",
+            end: "bottom bottom",
+            // 0.3 adds a tiny "follow" smoothing effect between the scroll and the video frame
+            scrub: 0.3, 
+            onUpdate: (self) => {
+                // Update Progress Bar
+                progressBar.style.width = `${self.progress * 100}%`;
+            }
+        },
+        currentTime: video.duration,
+        ease: "none"
+    });
 });
-window.addEventListener("resize", resizeCanvas);
 
+// Navbar Transparency Trigger
+window.addEventListener("scroll", () => {
+    if (window.scrollY > 40) navbar.classList.add("scrolled");
+    else navbar.classList.remove("scrolled");
+});
 
 /* =========================
    TEXT REVEAL ANIMATIONS
