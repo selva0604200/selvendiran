@@ -99,7 +99,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08); 
             border-radius: 20px;
             scroll-margin-top: 5rem;
-            contain: content; /* Isolates rendering overhead */
+            contain: content;
             transform: translateZ(0);
         }
 
@@ -371,7 +371,6 @@ let lastRenderedFrame = -1;
 function drawFrame() {
     const frameIndex = Math.round(sequence.frame);
     
-    // Only repaint canvas when frame index actually changes
     if (frameIndex !== lastRenderedFrame) {
         const img = images[frameIndex];
         if (img && img.complete && img.naturalWidth > 0) {
@@ -400,7 +399,7 @@ requestAnimationFrame(drawFrame);
 window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    lastRenderedFrame = -1; // Force repaint
+    lastRenderedFrame = -1; 
 });
 window.dispatchEvent(new Event('resize')); 
 
